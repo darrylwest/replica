@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(cmake-project-template)
+project(replicabk)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -O3")
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
@@ -17,6 +17,6 @@ include_directories(${DIVISIBLE_INSTALL_INCLUDE_DIR})
 include_directories(${DIVISION_HEADERS_DIR})
 
 add_subdirectory(src)
-add_subdirectory(test)
+# add_subdirectory(test)
 
 
