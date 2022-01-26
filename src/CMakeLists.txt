@@ -4,6 +4,6 @@ project(replica)
 add_subdirectory(replica)
 set(SOURCE_FILES main.cpp)
 
-# add_executable(replica ${SOURCE_FILES})
-# target_link_libraries(replica replica)
+add_executable(replicabk ${SOURCE_FILES})
+target_link_libraries(replicabk replica)
 # install(TARGETS replica DESTINATION ${DIVISIBLE_INSTALL_BIN_DIR})
