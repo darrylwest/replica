@@ -11,7 +11,7 @@
 #include <string>
 
 namespace replica {
-    // namespace clk = std::chrono::system_clock;
+    namespace chrono = std::chrono;
     namespace fs = std::filesystem;
 
     struct PollSpec {
@@ -37,7 +37,7 @@ namespace replica {
         std::string sha;
         std::uintmax_t size;
         fs::file_time_type last_modified;
-        std::chrono::system_clock::time_point last_replica;
+        chrono::system_clock::time_point last_replica;
         // replica::FileSpec last_file_spec;
     };
 }
