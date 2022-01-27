@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
     if (config.dryrun) {
         // show the complete config...
         std::cout << "Config: dry-run: " << config.dryrun << std::endl;
+        std::cout << "Poll.enabled: " << config.poll_spec.enabled << std::endl;
+
         return 0;
     }
 
