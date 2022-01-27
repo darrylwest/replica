@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 #include "cxxopts.hpp"
 
 namespace replica {
@@ -48,6 +49,11 @@ namespace replica {
 
         return config;
     }
+
+    struct PollSpec {
+        bool enabled = false;
+        long interval;
+    };
 }
 
 #endif //REPLICA_REPLICA_HPP

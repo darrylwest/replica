@@ -8,7 +8,11 @@ int main(int argc, char *argv[]) {
 
     replica::Config config = replica::parse(argc, argv);
 
-    std::cout << "Config: dry-run: " << config.dryrun << std::endl;
+    if (config.dryrun) {
+        // show the complete config...
+        std::cout << "Config: dry-run: " << config.dryrun << std::endl;
+        return 0;
+    }
 
     return 0;
 }
