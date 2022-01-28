@@ -12,23 +12,30 @@ function clean() {
 }
 
 function config() {
-  [ -f build/Makefile ] || {
-    printf "create build folder...\n"
-    /bin/rm -fr build
-    mkdir build && cd build && cmake ../
-  }
+  (
+    [ -f build/Makefile ] || {
+      printf "create build folder...\n"
+      /bin/rm -fr build
+      mkdir build && cd build && cmake ../
+    }
+  )
 }
 
 function build() {
-  cd build 
-  make
+  (
+    cd build 
+    make
+  )
 }
 
 function run() {
-  printf "run the examples...\n"
-  ./replica --version
-  ./replica --help
-  ./replica --dryrun
+  (
+    printf "run the examples...\n"
+    cd build 
+    ./replica --version
+    ./replica --help
+    ./replica --dryrun
+  )
 }
 
 echo "program: $0"
