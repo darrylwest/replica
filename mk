@@ -6,18 +6,29 @@
 set -eu
 
 function config() {
-  [ -d build ] || mkdir build
+  (
+    [ -d build ] || {
+      mkdir build
+      cd build
+      cmake ..
+    }
+  )
 }
 
 function build() {
-  cd build 
-  make
+  (
+    cd build 
+    make
+  )
 }
 
 function run() {
-  ./replica --version
-  ./replica --help
-  ./replica --dryrun
+  (
+    cd build 
+    ./replica --version
+    ./replica --help
+    ./replica --dryrun
+  )
 }
 
 config && build && run
