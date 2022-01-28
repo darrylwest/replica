@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "../include/replica.hpp"
+#include "replica.hpp"
 
 int main(int argc, char *argv[]) {
     std::cout << replica::BANNER << '\n';
@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
     if (config.dryrun) {
         // show the complete config...
         std::cout << "Config: dry-run: " << config.dryrun << std::endl;
+        std::cout << "Poll.enabled: " << config.poll_spec.enabled << std::endl;
+
         return 0;
     }
 
