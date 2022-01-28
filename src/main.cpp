@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "../include/replica.hpp"
+#include "replica.hpp"
 
 int main(int argc, char *argv[]) {
     std::cout << replica::BANNER << '\n';
