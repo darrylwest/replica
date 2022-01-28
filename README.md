@@ -31,8 +31,24 @@ is enabled for CLion but can be done in vim, vscode, or any editor.
 * ?? for compression when necessary
 * fswatch (or other watch lib) to monitor mac os or linux file systesms
 
+## Package Management
+
+[CPM?](https://github.com/cpm-cmake/CPM.cmake)
+
 ## Data Structs
 
+### PollSpec
+
+Used to define a file/folder polling interval and whether is should be enabled or disabled.
+
+### ReplicaSpec
+
+Defines files to watch and targets for replication.  Also includes poll spec to determine if polling is preferred it watcher.
+
+
+### FileSpec
+
+Specs on each watched file including modification date, size, sha sum, and the last time it was replicated.
 
 ## Notes
 

@@ -2,6 +2,7 @@
 # 2022-01-28 09:48:22 dpw
 #
 cmake_minimum_required(VERSION 3.16)
+# todo: create header.in to read version
 project(replica VERSION 1.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
