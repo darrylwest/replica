@@ -2,8 +2,9 @@
 // Created by Darryl West on 1/27/22.
 //
 
-#ifndef REPLICA_REPLICA_HPP
-#define REPLICA_REPLICA_HPP
+#pragma once
+// #ifndef REPLICA_REPLICA_HPP
+// #define REPLICA_REPLICA_HPP
 
 #include <iostream>
 #include <string>
@@ -66,4 +67,4 @@ namespace replica {
 
 }
 
-#endif //REPLICA_REPLICA_HPP
+// #endif //REPLICA_REPLICA_HPP
