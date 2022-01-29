@@ -2,17 +2,19 @@
 # 2022-01-28 09:48:22 dpw
 #
 cmake_minimum_required(VERSION 3.16)
+# todo: create header.in to read version
 project(replica VERSION 1.0.1 LANGUAGES CXX)
 
+# configure_file(app_version.hpp.in in app_version.hpp)
+
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(GoogleTest)
 
 add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
 
-project(replica VERSION 1.0.1 LANGUAGES CXX)
-add_executable(replica src/main.cpp) # should add new source files now...
+add_executable(${PROJECT_NAME} src/main.cpp) # should add new source files now...
 target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # could define the file list this way, but not recommended

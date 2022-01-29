@@ -31,12 +31,38 @@ is enabled for CLion but can be done in vim, vscode, or any editor.
 * ?? for compression when necessary
 * fswatch (or other watch lib) to monitor mac os or linux file systesms
 
+## Package Management
+
+[CPM?](https://github.com/cpm-cmake/CPM.cmake)
+
 ## Data Structs
 
+### PollSpec
+
+Used to define a file/folder polling interval and whether is should be enabled or disabled.
+
+### ReplicaSpec
+
+Defines files to watch and targets for replication.  Also includes poll spec to determine if polling is preferred it watcher.
+
+
+### FileSpec
+
+Specs on each watched file including modification date, size, sha sum, and the last time it was replicated.
 
 ## Notes
 
 * no classes, just structs
+
+### References
+
+* [Building & Packaging](https://learning.oreilly.com/library/view/software-architecture-with/9781838554590/7f997c01-2634-4584-be95-0b068f448312.xhtml#uuid-f1312c0b-6145-4f6c-a1ea-16e37221eb42): Software Architecture with C++; info on CMake, CPack, Conan and Google Test
+* [Mastering StdLib](https://learning.oreilly.com/library/view/professional-c-4th/9781119421306/c18.xhtml): Professional C++, 4th Edition; Lambdas, Function objects, RegEx, Ratios, Chrono, Random, Optional, Variant, Tuples, Filesystem
+* [C++20 for Programmers](https://learning.oreilly.com/library/view/c-20-for-programmers/9780136905776/ch06.xhtml#ch06); The basics of c++20, Ranges, Modules, Containers
+* [Modern C++ Programming Cookbook](https://learning.oreilly.com/library/view/modern-c-programming/9781800208988/Text/Chapter_1.xhtml#_idParaDest-18); 
+  * lots of c++20 new features :Type aliases, Alias & Function templates, Ranges, Unnamed Namespaces, Structured binding/mult-return values, static cast.
+  * Filesystem, Chrono, Containers
+  * Catch2, Google Test
 
 ###### darryl.west | 2022.01.28
 

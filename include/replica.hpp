@@ -9,15 +9,38 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <filesystem>
 #include "cxxopts.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.1.27";
+    const char* APP_VERSION = "22.1.28";
     const char* BANNER = "Replica Backup Service © 2022 Rain City Software";
 
     struct PollSpec {
-        bool enabled = false;
-        long interval = 60000;
+        bool enabled {false};
+        long interval {60000};
+    };
+
+    struct ReplicaSpec {
+        std::string version;
+        std::string name;
+        std::vector<std::string> src_folders;
+        std::vector<std::string> targets;
+        bool compress {false};
+        std::vector<std::string> compression_rules;
+        bool encrypt {false};
+        std::vector<std::string> encryption_rules;
+        PollSpec poll_spec;
+    };
+
+    namespace fs = std::filesystem;
+    using tp = std::chrono::system_clock::time_point;
+    struct FileSpec {
+        std::string filename;
+        std::string sha;
+        std::uintmax_t size;
+        fs::file_time_type last_modified;
+        tp last_replica;
     };
 
     struct Config {
