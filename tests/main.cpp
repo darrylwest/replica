@@ -1,10 +1,12 @@
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 
 #include <iostream>
-#include <string>
-#include <cassert>
+#include "../include/replica.hpp"
 
-int main(int argc, char *argv[]) {
-    assert(1 == 2);
+TEST_CASE("construct", "[create]") {
+  SECTION("test construct") {
+    std::cout << "hello" << std::endl;
+  }
 
-    return 0;
 }
