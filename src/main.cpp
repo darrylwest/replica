@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
 
     replica::Config config = replica::parse(argc, argv);
 
+    // TODO : move this to process module to enable unit tests...
     if (config.skip) {
         return 0;
     } else if (config.dryrun) {
