@@ -53,6 +53,9 @@ case $0 in
   *watch)
     watch
     ;;
+  *build)
+    build
+    ;;
   *clean)
     clean
     ;;
