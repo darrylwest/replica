@@ -14,6 +14,7 @@ TEST_CASE("construct", "[create]") {
         REQUIRE(strncmp(version, "22.", 3) == 0);
         REQUIRE_THAT(version, cm::Contains("22."));
     }
+
     SECTION("test banner") {
         auto const banner = replica::BANNER;
         CHECK(banner != nullptr);
@@ -103,7 +104,7 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == false);
-        REQUIRE(config.poll_spec.enabled == true);
+        REQUIRE(config.poll_spec.enabled == false);
         REQUIRE_THAT(config.config_file, cm::Matches("custom-config.json"));
     }
 }

@@ -22,10 +22,7 @@ function config() {
 }
 
 function build() {
-  (
-    cd build 
-    make
-  )
+  ( cd build && make )
 }
 
 function run() {
@@ -44,7 +41,7 @@ function watch() {
 }
 
 function run_tests() {
-  test/build/replica_unit_tests
+  ./build/test/replica_unit_tests --durations yes
 }
 
 

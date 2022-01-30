@@ -81,6 +81,10 @@ namespace replica {
             if (result.count("poll")) {
                 poll_spec.enabled = result["poll"].as<bool>();
             }
+
+            if (result.count("config")) {
+                config.config_file = result["config"].as<std::string>();
+            }
         } catch (const cxxopts::OptionException& e) {
             std::cout << "error parsing options: " << e.what() << std::endl;
             config.skip = true;
