@@ -12,7 +12,7 @@
 
 namespace replica {
     const char* APP_VERSION = "22.1.29";
-    const char* BANNER = "Replica Backup Service © 2022 Rain City Software";
+    const char* BANNER = "Replica File Exchange Service © 2022 Rain City Software";
 
     struct PollSpec {
         bool enabled {false};
@@ -85,7 +85,4 @@ namespace replica {
 
         return config;
     }
-
 }
-
-// #endif //REPLICA_REPLICA_HPP
