@@ -2,17 +2,19 @@
 #include "catch.hpp"
 
 #include <iostream>
-#include <string>
+#include <cstring>
 #include "../include/replica.hpp"
 
 TEST_CASE("construct", "[create]") {
     SECTION("test version") {
         auto const vers = replica::APP_VERSION;
         REQUIRE(vers != nullptr);
+        REQUIRE(strcmp(vers, "22.1.29") == 0);
     }
     SECTION("test banner") {
-        auto const banner = replica::APP_VERSION;
+        auto const banner = replica::BANNER;
         REQUIRE(banner != nullptr);
+        REQUIRE(strlen(banner) > 10);
     }
 
     SECTION("poll spec struct - default") {

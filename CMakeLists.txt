@@ -15,6 +15,8 @@ add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
 add_executable(${PROJECT_NAME} src/main.cpp) # should add new source files now...
 target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+add_subdirectory(test)
+
 # add_executable(${PROJECT_NAME} test/main-test.cpp) # should add new source files now...
 # could define the file list this way, but not recommended
 # file(GLOB_RECURSE SRC_FILES src/*.cpp)
