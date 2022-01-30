@@ -3,8 +3,6 @@
 //
 
 #pragma once
-// #ifndef REPLICA_REPLICA_HPP
-// #define REPLICA_REPLICA_HPP
 
 #include <iostream>
 #include <string>
@@ -13,7 +11,7 @@
 #include "cxxopts.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.1.28";
+    const char* APP_VERSION = "22.1.29";
     const char* BANNER = "Replica Backup Service © 2022 Rain City Software";
 
     struct PollSpec {
