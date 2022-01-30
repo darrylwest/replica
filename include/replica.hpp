@@ -42,18 +42,22 @@ namespace replica {
     };
 
     struct Config {
+        std::string name;
         bool dryrun = true;
+        bool skip = false;
         std::string replica_home = ".replica";
         std::string config_file = "config.json";
         PollSpec poll_spec;
     };
 
-    Config parse(int argc, char *argv[]) {
+    Config parse(int argc, char* argv[]) {
         Config config;
         PollSpec poll_spec;
 
+        config.name = std::string(argv[0]);
+
         try {
-            cxxopts::Options options(argv[0], BANNER);
+            cxxopts::Options options(config.name, BANNER);
 
             options.add_options()
                 ("v,version", "Show the current version")
@@ -65,13 +69,13 @@ namespace replica {
             auto result = options.parse(argc, argv);
 
             if (result.count("version")) {
-                std::cout << argv[0] << " Version: " << replica::APP_VERSION << std::endl;
-                exit(0);
+                std::cout << config.name << " Version: " << replica::APP_VERSION << std::endl;
+                config.skip = true;
             }
 
             if (result.count("help")) {
                 std::cout << options.help() << std::endl;
-                exit(0);
+                config.skip = true;
             }
 
             if (result.count("poll")) {

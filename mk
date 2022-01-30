@@ -43,6 +43,11 @@ function watch() {
   watchexec -c -d 250 -e .cpp,.hpp,.txt -p -i build -w ./ ./mk
 }
 
+function run_tests() {
+  test/build/replica_unit_tests
+}
+
+
 echo "program: $0"
 case $0 in
   *watch)
@@ -52,7 +57,7 @@ case $0 in
     clean
     ;;
   *)
-    config && build && run
+    config && build && run && run_tests
     ;;
 esac
 

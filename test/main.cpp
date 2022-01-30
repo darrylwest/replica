@@ -5,21 +5,23 @@
 #include <cstring>
 #include "../include/replica.hpp"
 
+namespace cm = Catch::Matchers;
+
 TEST_CASE("construct", "[create]") {
     SECTION("test version") {
-        auto const vers = replica::APP_VERSION;
-        CHECK(vers != nullptr);
-        REQUIRE(strncmp(vers, "22.", 3) == 0);
-        REQUIRE_THAT(vers, Catch::Matchers::Contains("22."));
+        auto const version = replica::APP_VERSION;
+        CHECK(version != nullptr);
+        REQUIRE(strncmp(version, "22.", 3) == 0);
+        REQUIRE_THAT(version, cm::Contains("22."));
     }
     SECTION("test banner") {
         auto const banner = replica::BANNER;
         CHECK(banner != nullptr);
         REQUIRE(strlen(banner) > 35);
         REQUIRE(strlen(banner) < 128);
-        REQUIRE_THAT(banner, Catch::Matchers::Contains("Replica"));
-        REQUIRE_THAT(banner, Catch::Matchers::Contains("Service"));
-        REQUIRE_THAT(banner, Catch::Matchers::Contains("Rain City Software"));
+        REQUIRE_THAT(banner, cm::Contains("Replica"));
+        REQUIRE_THAT(banner, cm::Contains("Service"));
+        REQUIRE_THAT(banner, cm::Contains("Rain City Software"));
     }
 
     SECTION("poll spec struct - default") {
@@ -35,10 +37,29 @@ TEST_CASE("construct", "[create]") {
         REQUIRE(poll_spec.interval == interval);
     }
 }
+
 TEST_CASE("command line", "[parse]") {
+    char name[] = "replica";
+    char version[] = "--version";
+
     SECTION("zero args") {
-        auto poll_spec = replica::PollSpec{false, 12};
-        REQUIRE(poll_spec.enabled == false);
-        REQUIRE(poll_spec.interval == 12);
+        int argc = 1;
+        char *argv[] = {name};
+        auto config = replica::parse(argc, argv);
+        REQUIRE(std::end(argv) - std::begin(argv) == argc);
+        REQUIRE_THAT(config.name, cm::Equals(name));
+        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
+        REQUIRE(config.dryrun == true);
+        REQUIRE(config.skip == false);
+    }
+
+    SECTION("version") {
+        char *argv[] = { name, version};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::parse(argc, argv);
+        REQUIRE_THAT(config.name, cm::Equals(name));
+        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
+        REQUIRE(config.dryrun == true);
+        REQUIRE(config.skip == true);
     }
 }

@@ -6,7 +6,7 @@
 set -eu
 
 function run() {
-  watchexec -c -d 250 -e .cpp -p -i build -w ./ "cd build ; make && ./replica_test --durations yes"
+  watchexec -c -d 250 -e .cpp -p -i build -w ./ "cd build ; make && ./replica_unit_tests --durations yes"
 }
 
 run
