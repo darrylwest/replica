@@ -11,7 +11,7 @@
 #include "cxxopts.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.1.29";
+    const char* APP_VERSION = "22.1.30";
     const char* BANNER = "Replica File Exchange Service © 2022 Rain City Software";
 
     struct PollSpec {
@@ -81,8 +81,13 @@ namespace replica {
             if (result.count("poll")) {
                 poll_spec.enabled = result["poll"].as<bool>();
             }
+
+            if (result.count("config")) {
+                config.config_file = result["config"].as<std::string>();
+            }
         } catch (const cxxopts::OptionException& e) {
             std::cout << "error parsing options: " << e.what() << std::endl;
+            config.skip = true;
         }
 
         config.poll_spec = poll_spec;

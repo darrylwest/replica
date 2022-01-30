@@ -22,10 +22,7 @@ function config() {
 }
 
 function build() {
-  (
-    cd build 
-    make
-  )
+  ( cd build && make )
 }
 
 function run() {
@@ -44,7 +41,7 @@ function watch() {
 }
 
 function run_tests() {
-  test/build/replica_unit_tests
+  ./build/test/replica_unit_tests --durations yes
 }
 
 
@@ -53,8 +50,14 @@ case $0 in
   *watch)
     watch
     ;;
+  *build)
+    build
+    ;;
   *clean)
     clean
+    ;;
+  *clean-mk)
+    time ( clean && config && build && run && run_tests )
     ;;
   *)
     config && build && run && run_tests

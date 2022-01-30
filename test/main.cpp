@@ -14,6 +14,7 @@ TEST_CASE("construct", "[create]") {
         REQUIRE(strncmp(version, "22.", 3) == 0);
         REQUIRE_THAT(version, cm::Contains("22."));
     }
+
     SECTION("test banner") {
         auto const banner = replica::BANNER;
         CHECK(banner != nullptr);
@@ -41,6 +42,10 @@ TEST_CASE("construct", "[create]") {
 TEST_CASE("command line", "[parse]") {
     char name[] = "replica";
     char version[] = "--version";
+    char help[] = "--help";
+    char poll[] = "--poll";
+    char config_option[] = "--config";
+    char config_file[] = "custom-config.json";
 
     SECTION("zero args") {
         int argc = 1;
@@ -51,6 +56,8 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == false);
+        REQUIRE(config.poll_spec.enabled == false);
+        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
     }
 
     SECTION("version") {
@@ -61,5 +68,43 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == true);
+        REQUIRE(config.poll_spec.enabled == false);
+        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+    }
+
+    SECTION("help") {
+        char *argv[] = { name, help};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::parse(argc, argv);
+        REQUIRE_THAT(config.name, cm::Equals(name));
+        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
+        REQUIRE(config.dryrun == true);
+        REQUIRE(config.skip == true);
+        REQUIRE(config.poll_spec.enabled == false);
+        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+    }
+
+    SECTION("poll") {
+        char *argv[] = { name, poll};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::parse(argc, argv);
+        REQUIRE_THAT(config.name, cm::Equals(name));
+        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
+        REQUIRE(config.dryrun == true);
+        REQUIRE(config.skip == false);
+        REQUIRE(config.poll_spec.enabled == true);
+        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+    }
+
+    SECTION("config") {
+        char *argv[] = { name, config_option, config_file};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::parse(argc, argv);
+        REQUIRE_THAT(config.name, cm::Equals(name));
+        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
+        REQUIRE(config.dryrun == true);
+        REQUIRE(config.skip == false);
+        REQUIRE(config.poll_spec.enabled == false);
+        REQUIRE_THAT(config.config_file, cm::Matches("custom-config.json"));
     }
 }

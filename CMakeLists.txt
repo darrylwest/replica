@@ -10,7 +10,7 @@ project(replica VERSION 1.0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
+add_compile_options(-Wall -Wextra -pedantic -Werror) # -O3) #this slows the compiler way, way down
 
 add_executable(${PROJECT_NAME} src/main.cpp) # should add new source files now...
 target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
