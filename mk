@@ -56,8 +56,11 @@ case $0 in
   *clean)
     clean
     ;;
+  *clean-mk)
+    time ( clean && config && build && run && run_tests )
+    ;;
   *)
-    time ( config && build && run && run_tests )
+    config && build && run && run_tests
     ;;
 esac
 
