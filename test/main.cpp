@@ -9,12 +9,13 @@ TEST_CASE("construct", "[create]") {
     SECTION("test version") {
         auto const vers = replica::APP_VERSION;
         REQUIRE(vers != nullptr);
-        REQUIRE(strcmp(vers, "22.1.29") == 0);
+        REQUIRE(strncmp(vers, "22.", 3) == 0);
     }
     SECTION("test banner") {
         auto const banner = replica::BANNER;
         REQUIRE(banner != nullptr);
-        REQUIRE(strlen(banner) > 10);
+        REQUIRE(strlen(banner) > 45);
+        REQUIRE(strncmp(banner, "Replica", 7) == 0);
     }
 
     SECTION("poll spec struct - default") {
