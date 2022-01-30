@@ -2,7 +2,6 @@
 #include "catch.hpp"
 
 #include <iostream>
-#include <cstring>
 #include "../include/replica.hpp"
 
 namespace cm = Catch::Matchers;

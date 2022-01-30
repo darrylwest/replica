@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#ifndef REPLICA_HPP
+#define REPLICA_HPP
 
 #include <iostream>
 #include <string>
@@ -95,3 +97,5 @@ namespace replica {
         return config;
     }
 }
+
+#endif
