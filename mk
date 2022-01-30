@@ -57,7 +57,7 @@ case $0 in
     clean
     ;;
   *)
-    config && build && run && run_tests
+    time ( config && build && run && run_tests )
     ;;
 esac
 
