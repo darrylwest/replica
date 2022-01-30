@@ -8,7 +8,10 @@ int main(int argc, char *argv[]) {
 
     replica::Config config = replica::parse(argc, argv);
 
-    if (config.dryrun) {
+    // TODO : move this to process module to enable unit tests...
+    if (config.skip) {
+        return 0;
+    } else if (config.dryrun) {
         // show the complete config...
         std::cout << "Config: dry-run: " << config.dryrun << std::endl;
         std::cout << "Poll.enabled: " << config.poll_spec.enabled << std::endl;

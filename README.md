@@ -62,7 +62,9 @@ Specs on each watched file including modification date, size, sha sum, and the l
 * [Modern C++ Programming Cookbook](https://learning.oreilly.com/library/view/modern-c-programming/9781800208988/Text/Chapter_1.xhtml#_idParaDest-18); 
   * lots of c++20 new features :Type aliases, Alias & Function templates, Ranges, Unnamed Namespaces, Structured binding/mult-return values, static cast.
   * Filesystem, Chrono, Containers
-  * Catch2, Google Test
+  * [Google Test](https://google.github.io/googletest/reference/assertions.html)
+  * [Catch2](https://catch2.docsforge.com/) -- single hpp install (v2/v2.13.2 prior to V3)
+  * gcovr
 
-###### darryl.west | 2022.01.28
+###### darryl.west | 2022.01.29
 
