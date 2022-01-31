@@ -66,6 +66,7 @@ Specs on each watched file including modification date, size, sha sum, and the l
   * [Catch2](https://catch2.docsforge.com/) -- single hpp install (v2/v2.13.2 prior to V3)
   * gcovr
 * [CCache](https://ccache.dev/)
+* [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 
 ###### darryl.west | 2022.01.30
 
