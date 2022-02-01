@@ -10,5 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES main.cpp)
 
+enable_testing()
 add_executable(${PROJECT_NAME} main.cpp)
+
+add_test(UnitTester ${PROJECT_NAME})
 
