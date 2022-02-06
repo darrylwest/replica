@@ -15,7 +15,12 @@ add_compile_options(-Wall -Wextra -pedantic -Werror) # -O3) #this slows the comp
 add_executable(${PROJECT_NAME} src/main.cpp) # should add new source files now...
 target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+enable_testing()
+
+# this compiles and adds build/tests/replica_unit_tests
 add_subdirectory(test)
+
+add_test(UnitTest test/replica_unit_tests)
 
 # add_executable(${PROJECT_NAME} test/main-test.cpp) # should add new source files now...
 # could define the file list this way, but not recommended

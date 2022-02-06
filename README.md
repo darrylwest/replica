@@ -1,11 +1,13 @@
-# Replica File Distribution Service
+# Replica File Service
 
 ```
-                   __ __                 __                __                
-.----.-----.-----.|  |__|.----.---.-.   |  |--.---.-.----.|  |--.--.--.-----.
-|   _|  -__|  _  ||  |  ||  __|  _  |   |  _  |  _  |  __||    <|  |  |  _  |
-|__| |_____|   __||__|__||____|___._|(.)|_____|___._|____||__|__|_____|   __|
-           |__|                                                      |__|   
+ ___          _ _           ___ _ _     ___              _        
+| _ \___ _ __| (_)__ __ _  | __(_) |___/ __| ___ _ ___ _(_)__ ___ 
+|   / -_) '_ \ | / _/ _` |_| _|| | / -_)__ \/ -_) '_\ V / / _/ -_)
+|_|_\___| .__/_|_\__\__,_(_)_| |_|_\___|___/\___|_|  \_/|_\__\___|
+        |_|                                                       
+
+  01110010 01100101 01110000 01101100 01101001 01100011 01100001
 ```
 
 ## Overview
@@ -65,6 +67,9 @@ Specs on each watched file including modification date, size, sha sum, and the l
   * [Google Test](https://google.github.io/googletest/reference/assertions.html)
   * [Catch2](https://catch2.docsforge.com/) -- single hpp install (v2/v2.13.2 prior to V3)
   * gcovr
+* [CCache](https://ccache.dev/)
+* [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
+* [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.01.29
+###### darryl.west | 2022.03.06
 
