@@ -1,13 +1,13 @@
-# Replica File Service
+# Replica Sync Service
 
 ```
- ___          _ _           ___ _ _     ___              _        
-| _ \___ _ __| (_)__ __ _  | __(_) |___/ __| ___ _ ___ _(_)__ ___ 
-|   / -_) '_ \ | / _/ _` |_| _|| | / -_)__ \/ -_) '_\ V / / _/ -_)
-|_|_\___| .__/_|_\__\__,_(_)_| |_|_\___|___/\___|_|  \_/|_\__\___|
-        |_|                                                       
+ ___          _ _           ___                ___              _
+| _ \___ _ __| (_)__ __ _  / __|_  _ _ _  __  / __| ___ _ ___ _(_)__ ___
+|   / -_) '_ \ | / _/ _` |_\__ \ || | ' \/ _|_\__ \/ -_) '_\ V / / _/ -_)
+|_|_\___| .__/_|_\__\__,_(_)___/\_, |_||_\__(_)___/\___|_|  \_/|_\__\___|
+        |_|                     |__/
 
-  01110010 01100101 01110000 01101100 01101001 01100011 01100001
+     01110010 01100101 01110000 01101100 01101001 01100011 01100001
 ```
 
 ## Overview
@@ -15,6 +15,10 @@
 Replica is a file watching and replication service that monitors files on a server or laptop and distributes the files to
 various target servers.  It is commonly used for simple remote backup but can also be used to develop multi-platform
 targets with instant compile and test feedback.
+
+### Replica Actors
+
+Two primary actors in the replica system are the Replica Hub and Replica Worker.  The hub directs workers to carry out various tasks as dictated by the hub's manifest.  The manifest can be updated at any time to add new or modify existing requirements.   Hubs may also request work from remote hubs when a replica sync needs to be performed across two or more machines.
 
 ## CMake & CLion
 
@@ -71,5 +75,5 @@ Specs on each watched file including modification date, size, sha sum, and the l
 * [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 * [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.03.06
+###### darryl.west | 2022.02.13
 
