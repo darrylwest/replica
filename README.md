@@ -16,6 +16,10 @@ Replica is a file watching and replication service that monitors files on a serv
 various target servers.  It is commonly used for simple remote backup but can also be used to develop multi-platform
 targets with instant compile and test feedback.
 
+### Replica Actors
+
+Two primary actors in the replica system are the Replica Hub and Replica Worker.  The hub directs workers to carry out various tasks as dictated by the hub's manifest.  The manifest can be updated at any time to add new or modify existing requirements.   Hubs may also request work from remote hubs when a replica sync needs to be performed across two or more machines.
+
 ## CMake & CLion
 
 This project is based on manual editing of CMakeFiles.txt to comply with src/library/test/build folder structure.  Development 
@@ -71,5 +75,5 @@ Specs on each watched file including modification date, size, sha sum, and the l
 * [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 * [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.03.06
+###### darryl.west | 2022.02.13
 
