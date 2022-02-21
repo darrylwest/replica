@@ -6,7 +6,10 @@
 #ifndef REPLICA_HPP
 #define REPLICA_HPP
 
-#include <iostream>
+#define FMT_HEADER_ONLY
+#include "fmt/format.h"
+#include "fmt/color.h"
+
 #include <string>
 #include <chrono>
 #include <vector>
