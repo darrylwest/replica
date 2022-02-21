@@ -20,6 +20,8 @@ int main(int argc, const char *argv[]) {
         auto logger = replica::create_logger();
         // the ticker listens for changes to config and  if polling is enabled, queries files for changes
 
+        replica::scan_myfiles();
+
         fmt::print("start the ticker... \n");
 
         // listen for signal events
