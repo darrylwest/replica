@@ -10,6 +10,11 @@
 #include "fmt/format.h"
 #include "fmt/color.h"
 
+#include <cstdlib>
+
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+
 #include <string>
 #include <chrono>
 #include <vector>
@@ -46,6 +51,41 @@ namespace replica {
         tp last_replica;
         tp last_scan;
     };
+
+    auto home_path() {
+        auto path = std::string(std::getenv("HOME")) + std::string("/.replica");
+        auto home = fs::path(path);
+
+        if (!fs::exists(home)) {
+            fmt::print("Create replica home: {}\n", path);
+            fs::create_directory(home);
+        }
+
+        return home;
+    }
+
+    auto create_logger() {
+        static const char *NAME = "replica-logger";
+
+        auto logger = spdlog::get(NAME);
+
+        // start the logger
+        if (logger == NULL) {
+            fs::path logfile = home_path();
+            logfile.append(std::string{"replica.log"});
+            fmt::print("logfile : {} \n", logfile.c_str());
+
+            const int max_size = 500000;
+            const int max_files = 3;
+
+            logger = spdlog::rotating_logger_mt(NAME, logfile, max_size, max_files);
+
+            logger->info("Started rolling-logger with max size: {} bytes...", max_size);
+        }
+
+        return logger;
+    }
+
 }
 
 #endif

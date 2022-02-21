@@ -13,10 +13,13 @@
 #include "cxxopts.hpp"
 
 namespace replica {
-
     namespace config {
         struct Config {
             std::string name;
+            std::string logger_name = "replica_logger";
+            std::string log_filename = "replica.log";
+            int max_log_size = 100000;
+            int max_log_files = 3;
             bool dryrun = true;
             bool skip = false;
             std::string replica_home = ".replica";
