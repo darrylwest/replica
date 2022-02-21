@@ -1,20 +1,28 @@
+//
+// dpw
+//
 
 #include <iostream>
+
+#define FMT_HEADER_ONLY
+#include "fmt/format.h"
+#include "fmt/color.h"
+
 #include "replica.hpp"
 #include "config.hpp"
 
 int main(int argc, const char *argv[]) {
-    replica::config::Config config = replica::config::parse(argc, argv);
+    auto config = replica::config::parse(argc, argv);
 
     // TODO : move this part to process module to enable unit tests...
     if (config.skip) {
         return 0;
     } else if (config.dryrun) {
-        std::cout << replica::BANNER << '\n';
-        std::cout << "Version: " << replica::APP_VERSION << std::endl;
+        auto style = fg(fmt::color::lime) | fmt::emphasis::bold;
+        fmt::print(style, "{}, Version: {}\n", replica::BANNER, replica::APP_VERSION);
 
         // the ticker listens for changes to config and  if polling is enabled, queries files for changes
-        std::cout << "start the ticker..." << '\n';
+        fmt::print("start the ticker... \n");
 
         // listen for signal events
 
