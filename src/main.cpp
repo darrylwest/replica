@@ -1,9 +1,10 @@
 
 #include <iostream>
 #include "replica.hpp"
+#include "config.hpp"
 
-int main(int argc, char *argv[]) {
-    replica::Config config = replica::parse(argc, argv);
+int main(int argc, const char *argv[]) {
+    replica::config::Config config = replica::config::parse(argc, argv);
 
     // TODO : move this part to process module to enable unit tests...
     if (config.skip) {
@@ -12,12 +13,10 @@ int main(int argc, char *argv[]) {
         std::cout << replica::BANNER << '\n';
         std::cout << "Version: " << replica::APP_VERSION << std::endl;
 
-        // show the complete config...
-        std::cout << "Config: name: " << config.name << std::endl;
-        std::cout << "Config: home: " << config.replica_home << std::endl;
-        std::cout << "Config: dry-run: " << config.dryrun << std::endl;
-        std::cout << "Poll.enabled: " << config.poll_spec.enabled << std::endl;
-        std::cout << "Config: file: " << config.config_file << std::endl;
+        // the ticker listens for changes to config and  if polling is enabled, queries files for changes
+        std::cout << "start the ticker..." << '\n';
+
+        // listen for signal events
 
         return 0;
     }
