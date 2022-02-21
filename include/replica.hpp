@@ -72,6 +72,9 @@ namespace replica {
         // start the logger
         if (logger == NULL) {
             fs::path logfile = home_path();
+
+            // TODO : if a replica.log.specs file exists, read params from it...
+
             logfile.append(std::string{"replica.log"});
             fmt::print("logfile : {} \n", logfile.c_str());
 
