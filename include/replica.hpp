@@ -45,14 +45,21 @@ namespace replica {
     using tp = std::chrono::system_clock::time_point;
     struct FileSpec {
         std::string filename;
-        std::string sha;
         std::uintmax_t size;
         size_t last_modified;
-        tp last_replica;
-        tp last_scan;
+        size_t last_replica;
+        size_t last_scan;
+        std::string sha;
 
         std::string to_string() {
-            return fmt::format("{},{},{}", this->filename, this->size, this->last_modified);
+            return fmt::format("{},{},{},{},{},{}", 
+                this->filename, 
+                this->size, 
+                this->last_modified,
+                this->last_replica,
+                this->last_scan,
+                this->sha
+            );
         }
     };
 
@@ -114,8 +121,17 @@ namespace replica {
         return std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
     }
 
+    auto get_epoch_now() {
+        const auto now = std::chrono::system_clock::now();
+        const auto epoch = now.time_since_epoch();
+        const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch);
+
+        return seconds.count();
+    }
+
     // scan all files in the specified folder; return a vector of 
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
+        using namespace std::chrono;
         auto logger = create_logger();
         logger->info("scan folder: {}", folder.string());
 
@@ -129,7 +145,11 @@ namespace replica {
                 spec.filename = file.path();
                 spec.size = file.file_size();
                 spec.last_modified = convert_file_time(file.last_write_time());
-                // spec.last_scan = now
+
+                const auto now = system_clock::now();
+                const auto epoch = now.time_since_epoch();
+
+                spec.last_scan = get_epoch_now();
 
                 files.emplace_back(spec);
             }
