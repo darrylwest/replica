@@ -78,6 +78,8 @@ _TODO : write a script to pull, build and install all deps to an internal (or ca
 * [ ] boost - v1.74 ; apt-get install libboost-all-dev / brew install boost
 * [ ] json - nlohmann-json ; brew install nlohmann-json ; debian: download, build and install
 
+_Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_master) to replace/augment json encoding..._
+
 ### References
 
 * [Building & Packaging](https://learning.oreilly.com/library/view/software-architecture-with/9781838554590/7f997c01-2634-4584-be95-0b068f448312.xhtml#uuid-f1312c0b-6145-4f6c-a1ea-16e37221eb42): Software Architecture with C++; info on CMake, CPack, Conan and Google Test
