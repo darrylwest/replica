@@ -117,11 +117,11 @@ namespace replica {
         return true;
     }
 
-    auto convert_file_time(const fs::file_time_type ftime) {
+    size_t convert_file_time(const fs::file_time_type ftime) {
         return std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
     }
 
-    auto get_epoch_now() {
+    size_t get_epoch_now() {
         const auto now = std::chrono::system_clock::now();
         const auto epoch = now.time_since_epoch();
         const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch);
@@ -145,9 +145,6 @@ namespace replica {
                 spec.filename = file.path();
                 spec.size = file.file_size();
                 spec.last_modified = convert_file_time(file.last_write_time());
-
-                const auto now = system_clock::now();
-                const auto epoch = now.time_since_epoch();
 
                 spec.last_scan = get_epoch_now();
 
