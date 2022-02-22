@@ -7,14 +7,12 @@
 #ifndef REPLICA_CONFIG_HPP
 #define REPLICA_CONFIG_HPP
 
-#include <iostream>
 #include <string>
 #include <chrono>
 #include <filesystem>
 #include "cxxopts.hpp"
 
 namespace replica {
-
     namespace config {
         struct Config {
             std::string name;
@@ -44,12 +42,12 @@ namespace replica {
                 auto result = options.parse(argc, argv);
 
                 if (result.count("version")) {
-                    std::cout << config.name << " Version: " << replica::APP_VERSION << std::endl;
+                    fmt::print("{} Version: {}\n", config.name, replica::APP_VERSION);
                     config.skip = true;
                 }
 
                 if (result.count("help")) {
-                    std::cout << options.help() << std::endl;
+                    fmt::print("{}\n", options.help());
                     config.skip = true;
                 }
 
@@ -61,7 +59,8 @@ namespace replica {
                     config.config_file = result["config"].as<std::string>();
                 }
             } catch (const cxxopts::OptionException& e) {
-                std::cout << "error parsing options: " << e.what() << std::endl;
+                auto style = fg(fmt::color::red) | fmt::emphasis::bold;
+                fmt::print(style, "Error parsing options: {}\n", e.what());
                 config.skip = true;
             }
 
