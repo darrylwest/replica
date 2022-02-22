@@ -10,8 +10,6 @@
 #include "fmt/format.h"
 #include "fmt/color.h"
 
-#include <cstdlib>
-
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 
@@ -19,6 +17,8 @@
 #include <chrono>
 #include <vector>
 #include <filesystem>
+
+#include "utils.hpp"
 
 namespace replica {
     const char* APP_VERSION = "22.2.21";
@@ -117,18 +117,6 @@ namespace replica {
         return true;
     }
 
-    size_t convert_file_time(const fs::file_time_type ftime) {
-        return std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
-    }
-
-    size_t get_epoch_now() {
-        const auto now = std::chrono::system_clock::now();
-        const auto epoch = now.time_since_epoch();
-        const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch);
-
-        return seconds.count();
-    }
-
     // scan all files in the specified folder; return a vector of 
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
@@ -144,9 +132,9 @@ namespace replica {
                 auto spec = FileSpec();
                 spec.filename = file.path();
                 spec.size = file.file_size();
-                spec.last_modified = convert_file_time(file.last_write_time());
+                spec.last_modified = utils::file_mod_time(file.path());
 
-                spec.last_scan = get_epoch_now();
+                spec.last_scan = utils::epoch_now();
 
                 files.emplace_back(spec);
             }
