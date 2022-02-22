@@ -60,6 +60,24 @@ Specs on each watched file including modification date, size, sha sum, and the l
 
 * no classes, just structs
 
+## Dependencies
+
+std=c++20
+CMake 3.16
+Debian 11, gcc 10
+osX 12, Apple Clang 13.0.0, darwin 21.3
+
+_TODO : write a script to pull, build and install all deps to an internal (or cached) deps folder..._
+
+* [ ] fmt/format - download, build and install
+* [ ] spdlog - download, build and install
+* [ ] threads - available with gcc
+* [ ] cxxopts.hpp - in the include folder
+* [ ] openssl - install
+* [ ] catch2 - included in test folder
+* [ ] boost - v1.74 ; apt-get install libboost-all-dev / brew install boost
+* [ ] json - nlohmann-json ; brew install nlohmann-json ; debian: download, build and install
+
 ### References
 
 * [Building & Packaging](https://learning.oreilly.com/library/view/software-architecture-with/9781838554590/7f997c01-2634-4584-be95-0b068f448312.xhtml#uuid-f1312c0b-6145-4f6c-a1ea-16e37221eb42): Software Architecture with C++; info on CMake, CPack, Conan and Google Test
@@ -75,5 +93,5 @@ Specs on each watched file including modification date, size, sha sum, and the l
 * [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 * [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.02.13
+###### darryl.west | 2022.02.21
 
