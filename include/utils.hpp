@@ -28,8 +28,7 @@ namespace utils {
         struct stat result;
 
         if (stat(path.c_str(), &result) == 0) {
-            auto mod_time = result.st_mtime;
-            return mod_time;
+            return result.st_mtime;
         }
 
         return 0;

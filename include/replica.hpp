@@ -14,6 +14,7 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 
 #include <string>
+#include <string_view>
 #include <chrono>
 #include <vector>
 #include <filesystem>
@@ -120,7 +121,7 @@ namespace replica {
     // scan all files in the specified folder; return a vector of 
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
-        auto logger = create_logger();
+        const auto logger = create_logger();
         logger->info("scan folder: {}", folder.string());
 
         // TODO: first, verify that the folder exists...
@@ -146,13 +147,13 @@ namespace replica {
     }
 
     void scan_myfiles() {
-        auto logger = create_logger();
-        auto path = std::string("/usr/local/bin/");
+        const auto logger = create_logger();
+        const auto path = std::string_view("/usr/local/bin/");
         const auto folder = fs::path(path);
 
         const auto extensions = svec();
         const auto excludes = svec();
-        auto list = scan_files(path, extensions, excludes);
+        const auto list = scan_files(path, extensions, excludes);
 
         for (auto file : list) {
             logger->info("{}", file.to_string());
