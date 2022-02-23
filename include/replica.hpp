@@ -21,7 +21,7 @@
 #include "utils.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.2.21";
+    const char* APP_VERSION = "22.2.22";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     struct PollSpec {
