@@ -1,0 +1,10 @@
+{
+    "name": "replica-default",
+    "dryrun": false,
+    "replica_home": ".replica",
+    "poll_spec": {
+        "enabled": true,
+        "interval": 5000
+    }
+}
+

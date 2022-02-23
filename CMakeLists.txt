@@ -10,6 +10,7 @@ project(replica VERSION 1.0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Threads REQUIRED)
 add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
@@ -19,6 +20,7 @@ target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
 enable_testing()
 
