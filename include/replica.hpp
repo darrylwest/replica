@@ -143,13 +143,13 @@ namespace replica {
 
         logger->info("start the ticker with interval: {}", config.interval);
 
-        const svec excludes{"fmt/", "cxxopts.hpp", "catch.hpp", ".git/", "/build/"};
-        const svec extensions{".hpp", ".cpp"};
+        // const svec excludes{"fmt/", "cxxopts.hpp", "catch.hpp", ".git/", "/build/"};
+        // const svec extensions{".hpp", ".cpp"};
 
         auto last_scan = fvec();
         
         for (const auto src : config.sources) {
-            auto files = scan_files(fs::path(src), extensions, excludes);
+            auto files = scan_files(fs::path(src), config.extensions, config.excludes);
             for (const auto file : files) {
                 last_scan.push_back(file);
             }
