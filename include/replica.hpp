@@ -20,11 +20,10 @@
 #include <filesystem>
 
 #include "utils.hpp"
+#include "ticker.hpp"
+#include "config.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.2.28";
-    const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
-
     namespace fs = std::filesystem;
     using tp = std::chrono::system_clock::time_point;
     struct FileSpec {
@@ -98,10 +97,20 @@ namespace replica {
             }
         }
 
-        return true;
+        if (extensions.size() == 0) return true;
+
+        const auto ext = path.extension();
+        std::cout << path.string() << ", ext: " << ext;
+        for (auto const& in : extensions) {
+            if (in == ext) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    // scan all files in the specified folder; return a vector of 
+    // scan all files in the specified folder; return a vector of included files
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
         const auto logger = get_logger();
@@ -129,21 +138,36 @@ namespace replica {
         return files;
     }
 
-    /*
-    void start_scan() {
+    void start_scan(replica::config::Config config) {
+        const auto logger = get_logger();
 
-        const auto path = std::string_view("/usr/local/bin/");
-        const auto folder = fs::path(path);
+        logger->info("start the ticker with interval: {}", config.interval);
 
-        const auto extensions = svec();
-        const auto excludes = svec();
-        const auto list = scan_files(path, extensions, excludes);
+        const svec excludes{"fmt/", "cxxopts.hpp", "catch.hpp", ".git/", "/build/"};
+        const svec extensions{".hpp", ".cpp"};
 
-        for (auto file : list) {
-            logger->info("{}", file.to_string());
+        auto last_scan = fvec();
+        
+        for (const auto src : config.sources) {
+            auto files = scan_files(fs::path(src), extensions, excludes);
+            for (const auto file : files) {
+                last_scan.push_back(file);
+            }
         }
+
+        std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
+            logger->info("tick {}", tick);
+
+            for (auto file : last_scan) {
+                logger->info("{} {} {}", file.filename, file.last_modified, file.size);
+            }
+
+            logger->flush();
+            return true;
+        });
+
+        t.join();
     }
-    */
 }
 
 #endif

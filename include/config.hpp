@@ -13,6 +13,9 @@
 #include "cxxopts.hpp"
 
 namespace replica {
+    const char* APP_VERSION = "22.2.28";
+    const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
+
     namespace config {
         struct Config {
             std::string name;
@@ -22,6 +25,8 @@ namespace replica {
             std::string config_file = "config.json";
             int interval = 1000;
             std::vector<std::string> sources;
+            std::vector<std::string> extensions;
+            std::vector<std::string> excludes;
             std::string cmd;
         };
 
@@ -39,7 +44,9 @@ namespace replica {
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
                     ("c,config", "The configuration file", cxxopts::value<std::string>())
                     ("i,interval", "Specify the loop inteval in milliseconds", cxxopts::value<int>())
-                    ("s,sources", "A delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
+                    ("s,sources", "A comma delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
+                    ("e,extensions", "A comma delimited list of extensions, e.g., .hpp,cpp,.c", cxxopts::value<std::vector<std::string>>())
+                    ("x,excludes", "A comma delimited list of files/folders to exclude", cxxopts::value<std::vector<std::string>>())
                     ("cmd", "A system command to run when a watched file is modified", cxxopts::value<std::string>())
                 ;
 
@@ -61,6 +68,14 @@ namespace replica {
 
                 if (result.count("sources")) {
                     config.sources = result["sources"].as<std::vector<std::string>>();
+                }
+
+                if (result.count("extensions")) {
+                    config.extensions = result["extensions"].as<std::vector<std::string>>();
+                }
+
+                if (result.count("excludes")) {
+                    config.excludes = result["excludes"].as<std::vector<std::string>>();
                 }
 
                 if (result.count("cmd")) {
