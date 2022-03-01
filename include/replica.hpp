@@ -14,33 +14,16 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 
 #include <string>
+#include <string_view>
 #include <chrono>
 #include <vector>
 #include <filesystem>
 
 #include "utils.hpp"
+#include "ticker.hpp"
+#include "config.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.2.22";
-    const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
-
-    struct PollSpec {
-        bool enabled {true};
-        long interval {5000}; // millis
-    };
-
-    struct ReplicaSpec {
-        std::string version;
-        std::string name;
-        std::vector<std::string> src_folders;
-        std::vector<std::string> targets;
-        bool compress {false};
-        std::vector<std::string> compression_rules;
-        bool encrypt {false};
-        std::vector<std::string> encryption_rules;
-        PollSpec poll_spec;
-    };
-
     namespace fs = std::filesystem;
     using tp = std::chrono::system_clock::time_point;
     struct FileSpec {
@@ -75,7 +58,7 @@ namespace replica {
         return home;
     }
 
-    auto create_logger() {
+    auto get_logger() {
         static const char *NAME = "replica-logger";
 
         auto logger = spdlog::get(NAME);
@@ -102,6 +85,8 @@ namespace replica {
 
     using svec = std::vector<std::string>;
     using fvec = std::vector<FileSpec>;
+    using pvec = std::vector<fs::path>;
+
     bool include(const fs::path path, const svec extensions, const svec excludes) {
         if (extensions.size() == 0 && excludes.size() == 0) {
             return true;
@@ -114,16 +99,23 @@ namespace replica {
             }
         }
 
-        return true;
+        if (extensions.size() == 0) return true;
+
+        const auto ext = path.extension();
+        for (auto const& in : extensions) {
+            if (in == ext) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    // scan all files in the specified folder; return a vector of 
+    // scan all files in the specified folder; return a vector of included files
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
-        auto logger = create_logger();
-        logger->info("scan folder: {}", folder.string());
-
-        // TODO: first, verify that the folder exists...
+        const auto logger = get_logger();
+        logger->debug("scan folder: {}", folder.string());
 
         auto files = fvec();
 
@@ -140,23 +132,65 @@ namespace replica {
             }
         }
 
-        logger->info("scan complete, files: {}", files.size());
+        logger->info("file count: {}", files.size());
+        for (const auto file : files) {
+            logger->debug("{} {} {}", file.filename, file.last_modified, file.size);
+        }
 
         return files;
     }
 
-    void scan_myfiles() {
-        auto logger = create_logger();
-        auto path = std::string("/usr/local/bin/");
-        const auto folder = fs::path(path);
+    fvec scan_folders(const svec folders, const svec extensions, const svec excludes) {
+        auto files = fvec();
 
-        const auto extensions = svec();
-        const auto excludes = svec();
-        auto list = scan_files(path, extensions, excludes);
-
-        for (auto file : list) {
-            logger->info("{}", file.to_string());
+        for (const auto src : folders) {
+            auto list = scan_files(fs::path(src), extensions, excludes);
+            for (const auto file : list) {
+                files.push_back(file);
+            }
         }
+
+        return files;
+    }
+
+    svec validate_folders(const svec sources) {
+        auto folders = svec();
+
+        for (const auto src : sources) {
+            auto p = fs::path(src);
+            folders.push_back(src);
+        }
+
+        return folders;
+    }
+
+    void start_scan(replica::config::Config config) {
+        const auto logger = get_logger();
+        logger->info("start the ticker with interval: {}", config.interval);
+
+        const auto folders = validate_folders(config.sources);
+
+        auto last_scan = scan_folders(folders, config.extensions, config.excludes);
+
+        logger->info("total of {} files", last_scan.size());
+
+        std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
+            logger->info("last scan file count: {}", last_scan.size());
+
+            auto files = scan_folders(folders, config.extensions, config.excludes);
+            for (const auto file : files) {
+                // compare with last scan
+                logger->info("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
+            }
+
+            // if there are changes run the cmd then do the last_scan again...
+
+            logger->flush();
+
+            return tick < 3;
+        });
+
+        t.join();
     }
 }
 

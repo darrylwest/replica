@@ -24,26 +24,12 @@ TEST_CASE("construct", "[create]") {
         REQUIRE_THAT(banner, cm::Contains("Service"));
         REQUIRE_THAT(banner, cm::Contains("Rain City Software"));
     }
-
-    SECTION("poll spec struct - default") {
-        auto poll_spec = replica::PollSpec();
-        REQUIRE(poll_spec.enabled == true);
-        REQUIRE(poll_spec.interval >= 1000);
-    }
-
-    SECTION("poll spec struct - custom") {
-        auto interval = 5000;
-        auto poll_spec = replica::PollSpec{true, interval};
-        REQUIRE(poll_spec.enabled == true);
-        REQUIRE(poll_spec.interval == interval);
-    }
 }
 
 TEST_CASE("command line", "[parse]") {
     char name[] = "replica";
     char version[] = "--version";
     char help[] = "--help";
-    char poll[] = "--poll";
     char config_option[] = "--config";
     char config_file[] = "custom-config.json";
 
@@ -56,7 +42,6 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == false);
-        REQUIRE(config.poll_spec.enabled == true);
         REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
     }
 
@@ -68,7 +53,6 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == true);
-        REQUIRE(config.poll_spec.enabled == true);
         REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
     }
 
@@ -80,19 +64,6 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == true);
-        REQUIRE(config.poll_spec.enabled == true);
-        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
-    }
-
-    SECTION("poll") {
-        const char *argv[] = { name, poll};
-        int argc = std::end(argv) - std::begin(argv);
-        auto config = replica::config::parse(argc, argv);
-        REQUIRE_THAT(config.name, cm::Equals(name));
-        REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
-        REQUIRE(config.dryrun == true);
-        REQUIRE(config.skip == false);
-        REQUIRE(config.poll_spec.enabled == true);
         REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
     }
 
@@ -104,7 +75,6 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == true);
         REQUIRE(config.skip == false);
-        REQUIRE(config.poll_spec.enabled == true);
         REQUIRE_THAT(config.config_file, cm::Matches("custom-config.json"));
     }
 }

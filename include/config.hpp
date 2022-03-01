@@ -13,6 +13,9 @@
 #include "cxxopts.hpp"
 
 namespace replica {
+    const char* APP_VERSION = "22.2.28";
+    const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
+
     namespace config {
         struct Config {
             std::string name;
@@ -20,12 +23,15 @@ namespace replica {
             bool skip = false;
             std::string replica_home = ".replica";
             std::string config_file = "config.json";
-            replica::PollSpec poll_spec;
+            int interval = 1000;
+            std::vector<std::string> sources;
+            std::vector<std::string> extensions;
+            std::vector<std::string> excludes;
+            std::string cmd;
         };
 
         Config parse(int argc, const char* argv[]) {
             Config config;
-            replica::PollSpec poll_spec;
 
             config.name = std::string(argv[0]);
 
@@ -35,9 +41,14 @@ namespace replica {
                 options.add_options()
                     ("v,version", "Show the current version")
                     ("h,help", "Show this help")
-                    ("p,poll", "enable polling", cxxopts::value<bool>()->default_value("false"))
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
-                    ("c,config", "The configuration file", cxxopts::value<std::string>());
+                    ("c,config", "The configuration file", cxxopts::value<std::string>())
+                    ("i,interval", "Specify the loop inteval in milliseconds", cxxopts::value<int>())
+                    ("s,sources", "A comma delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
+                    ("e,extensions", "A comma delimited list of extensions, e.g., .hpp,cpp,.c", cxxopts::value<std::vector<std::string>>())
+                    ("x,excludes", "A comma delimited list of files/folders to exclude", cxxopts::value<std::vector<std::string>>())
+                    ("cmd", "A system command to run when a watched file is modified", cxxopts::value<std::string>())
+                ;
 
                 auto result = options.parse(argc, argv);
 
@@ -51,20 +62,34 @@ namespace replica {
                     config.skip = true;
                 }
 
-                if (result.count("poll")) {
-                    poll_spec.enabled = result["poll"].as<bool>();
-                }
-
                 if (result.count("config")) {
                     config.config_file = result["config"].as<std::string>();
+                }
+
+                if (result.count("sources")) {
+                    config.sources = result["sources"].as<std::vector<std::string>>();
+                }
+
+                if (result.count("extensions")) {
+                    config.extensions = result["extensions"].as<std::vector<std::string>>();
+                }
+
+                if (result.count("excludes")) {
+                    config.excludes = result["excludes"].as<std::vector<std::string>>();
+                }
+
+                if (result.count("cmd")) {
+                    config.cmd = result["cmd"].as<std::string>();
+                }
+
+                if (result.count("interval")) {
+                    config.interval = result["interval"].as<int>();
                 }
             } catch (const cxxopts::OptionException& e) {
                 auto style = fg(fmt::color::red) | fmt::emphasis::bold;
                 fmt::print(style, "Error parsing options: {}\n", e.what());
                 config.skip = true;
             }
-
-            config.poll_spec = poll_spec;
 
             return config;
         }
