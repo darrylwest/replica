@@ -115,7 +115,7 @@ namespace replica {
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
         const auto logger = get_logger();
-        logger->info("scan folder: {}", folder.string());
+        logger->debug("scan folder: {}", folder.string());
 
         auto files = fvec();
 
@@ -134,7 +134,7 @@ namespace replica {
 
         logger->info("file count: {}", files.size());
         for (const auto file : files) {
-            logger->info("{} {} {}", file.filename, file.last_modified, file.size);
+            logger->debug("{} {} {}", file.filename, file.last_modified, file.size);
         }
 
         return files;
@@ -144,8 +144,8 @@ namespace replica {
         auto files = fvec();
 
         for (const auto src : folders) {
-            auto files = scan_files(fs::path(src), extensions, excludes);
-            for (const auto file : files) {
+            auto list = scan_files(fs::path(src), extensions, excludes);
+            for (const auto file : list) {
                 files.push_back(file);
             }
         }
@@ -166,24 +166,28 @@ namespace replica {
 
     void start_scan(replica::config::Config config) {
         const auto logger = get_logger();
-        const auto folders = validate_folders(config.sources);
-
         logger->info("start the ticker with interval: {}", config.interval);
+
+        const auto folders = validate_folders(config.sources);
 
         auto last_scan = scan_folders(folders, config.extensions, config.excludes);
 
-        std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
-            logger->info("tick {}", tick);
+        logger->info("total of {} files", last_scan.size());
 
-            for (auto file : last_scan) {
-                logger->info("{} {} {}", file.filename, file.last_modified, file.size);
+        std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
+            logger->info("last scan file count: {}", last_scan.size());
+
+            auto files = scan_folders(folders, config.extensions, config.excludes);
+            for (const auto file : files) {
+                // compare with last scan
+                logger->info("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
             }
 
-            last_scan = scan_folders(folders, config.extensions, config.excludes);
+            // if there are changes run the cmd then do the last_scan again...
 
             logger->flush();
 
-            return true;
+            return tick < 3;
         });
 
         t.join();
