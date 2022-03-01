@@ -9,18 +9,6 @@
 #include "config.hpp"
 #include "ticker.hpp"
 
-/*
-bool tick_handler(const size_t tick) {
-    const auto logger = replica::get_logger();
-    logger->info("tick {}", tick);
-
-    std::cout << "run the thread loop, tick: " << tick << std::endl;
-
-    logger->flush();
-    return true;
-}
-*/
-
 void start_scan(replica::config::Config config) {
     const auto logger = replica::get_logger();
 
