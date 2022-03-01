@@ -9,6 +9,7 @@
 #include "config.hpp"
 #include "ticker.hpp"
 
+/*
 bool tick_handler(const size_t tick) {
     const auto logger = replica::get_logger();
     logger->info("tick {}", tick);
@@ -16,16 +17,21 @@ bool tick_handler(const size_t tick) {
     std::cout << "run the thread loop, tick: " << tick << std::endl;
 
     logger->flush();
-
     return true;
 }
+*/
 
 void start_scan(replica::config::Config config) {
     const auto logger = replica::get_logger();
 
     logger->info("start the ticker with interval: {}", config.interval);
 
-    std::thread t = replica::ticker::start(config.interval, tick_handler);
+    std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
+        logger->info("tick {}", tick);
+
+        logger->flush();
+        return true;
+    });
 
     t.join();
 }
