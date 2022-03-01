@@ -17,7 +17,7 @@ int main(int argc, const char *argv[]) {
         const auto style = fg(fmt::color::lime) | fmt::emphasis::bold;
         fmt::print(style, "{}, Version: {}\n", replica::BANNER, replica::APP_VERSION);
 
-        const auto logger = replica::create_logger();
+        const auto logger = replica::get_logger();
         // the ticker listens for changes to config and  if polling is enabled, queries files for changes
 
         replica::scan_myfiles();

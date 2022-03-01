@@ -59,6 +59,9 @@ case $0 in
   *clean-mk)
     time ( clean && config && build && run && run_tests )
     ;;
+  *mk)
+    build && run_tests
+    ;;
   *)
     config && build && run && run_tests
     ;;

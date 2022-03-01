@@ -21,6 +21,8 @@ namespace replica {
             std::string replica_home = ".replica";
             std::string config_file = "config.json";
             replica::PollSpec poll_spec;
+            std::string sources;
+            std::string cmd;
         };
 
         Config parse(int argc, const char* argv[]) {
@@ -37,7 +39,10 @@ namespace replica {
                     ("h,help", "Show this help")
                     ("p,poll", "enable polling", cxxopts::value<bool>()->default_value("false"))
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
-                    ("c,config", "The configuration file", cxxopts::value<std::string>());
+                    ("c,config", "The configuration file", cxxopts::value<std::string>())
+                    ("s,sources", "A commad delimited list of source folders to watch", cxxopts::value<std::string>())
+                    ("cmd", "A system command to run when a watched file is modified", cxxopts::value<std::string>())
+                ;
 
                 auto result = options.parse(argc, argv);
 
@@ -57,6 +62,14 @@ namespace replica {
 
                 if (result.count("config")) {
                     config.config_file = result["config"].as<std::string>();
+                }
+
+                if (result.count("sources")) {
+                    config.sources = result["sources"].as<std::string>();
+                }
+
+                if (result.count("cmd")) {
+                    config.cmd = result["cmd"].as<std::string>();
                 }
             } catch (const cxxopts::OptionException& e) {
                 auto style = fg(fmt::color::red) | fmt::emphasis::bold;

@@ -22,7 +22,7 @@
 #include "utils.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.2.22";
+    const char* APP_VERSION = "22.2.28";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     struct PollSpec {
@@ -76,7 +76,7 @@ namespace replica {
         return home;
     }
 
-    auto create_logger() {
+    auto get_logger() {
         static const char *NAME = "replica-logger";
 
         auto logger = spdlog::get(NAME);
@@ -121,7 +121,7 @@ namespace replica {
     // scan all files in the specified folder; return a vector of 
     fvec scan_files(const fs::path folder, const svec extensions, const svec excludes) {
         using namespace std::chrono;
-        const auto logger = create_logger();
+        const auto logger = get_logger();
         logger->info("scan folder: {}", folder.string());
 
         // TODO: first, verify that the folder exists...
@@ -147,7 +147,7 @@ namespace replica {
     }
 
     void scan_myfiles() {
-        const auto logger = create_logger();
+        const auto logger = get_logger();
         const auto path = std::string_view("/usr/local/bin/");
         const auto folder = fs::path(path);
 
