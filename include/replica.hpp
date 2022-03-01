@@ -85,6 +85,8 @@ namespace replica {
 
     using svec = std::vector<std::string>;
     using fvec = std::vector<FileSpec>;
+    using pvec = std::vector<fs::path>;
+
     bool include(const fs::path path, const svec extensions, const svec excludes) {
         if (extensions.size() == 0 && excludes.size() == 0) {
             return true;
@@ -100,7 +102,6 @@ namespace replica {
         if (extensions.size() == 0) return true;
 
         const auto ext = path.extension();
-        std::cout << path.string() << ", ext: " << ext;
         for (auto const& in : extensions) {
             if (in == ext) {
                 return true;
@@ -115,8 +116,6 @@ namespace replica {
         using namespace std::chrono;
         const auto logger = get_logger();
         logger->info("scan folder: {}", folder.string());
-
-        // TODO: first, verify that the folder exists...
 
         auto files = fvec();
 
@@ -133,27 +132,45 @@ namespace replica {
             }
         }
 
-        logger->info("scan complete, files: {}", files.size());
+        logger->info("file count: {}", files.size());
+        for (const auto file : files) {
+            logger->info("{} {} {}", file.filename, file.last_modified, file.size);
+        }
 
         return files;
     }
 
+    fvec scan_folders(const svec folders, const svec extensions, const svec excludes) {
+        auto files = fvec();
+
+        for (const auto src : folders) {
+            auto files = scan_files(fs::path(src), extensions, excludes);
+            for (const auto file : files) {
+                files.push_back(file);
+            }
+        }
+
+        return files;
+    }
+
+    svec validate_folders(const svec sources) {
+        auto folders = svec();
+
+        for (const auto src : sources) {
+            auto p = fs::path(src);
+            folders.push_back(src);
+        }
+
+        return folders;
+    }
+
     void start_scan(replica::config::Config config) {
         const auto logger = get_logger();
+        const auto folders = validate_folders(config.sources);
 
         logger->info("start the ticker with interval: {}", config.interval);
 
-        // const svec excludes{"fmt/", "cxxopts.hpp", "catch.hpp", ".git/", "/build/"};
-        // const svec extensions{".hpp", ".cpp"};
-
-        auto last_scan = fvec();
-        
-        for (const auto src : config.sources) {
-            auto files = scan_files(fs::path(src), config.extensions, config.excludes);
-            for (const auto file : files) {
-                last_scan.push_back(file);
-            }
-        }
+        auto last_scan = scan_folders(folders, config.extensions, config.excludes);
 
         std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
             logger->info("tick {}", tick);
@@ -162,7 +179,10 @@ namespace replica {
                 logger->info("{} {} {}", file.filename, file.last_modified, file.size);
             }
 
+            last_scan = scan_folders(folders, config.extensions, config.excludes);
+
             logger->flush();
+
             return true;
         });
 
