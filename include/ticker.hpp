@@ -26,7 +26,7 @@ namespace replica {
             std::thread t(run, interval, fn);
 
             return t;
-        };
+        }
     }
 }
 #endif

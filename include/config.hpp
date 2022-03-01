@@ -20,14 +20,13 @@ namespace replica {
             bool skip = false;
             std::string replica_home = ".replica";
             std::string config_file = "config.json";
-            replica::PollSpec poll_spec;
+            int interval = 1000;
             std::string sources;
             std::string cmd;
         };
 
         Config parse(int argc, const char* argv[]) {
             Config config;
-            replica::PollSpec poll_spec;
 
             config.name = std::string(argv[0]);
 
@@ -37,7 +36,6 @@ namespace replica {
                 options.add_options()
                     ("v,version", "Show the current version")
                     ("h,help", "Show this help")
-                    ("p,poll", "enable polling", cxxopts::value<bool>()->default_value("false"))
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
                     ("c,config", "The configuration file", cxxopts::value<std::string>())
                     ("s,sources", "A commad delimited list of source folders to watch", cxxopts::value<std::string>())
@@ -56,10 +54,6 @@ namespace replica {
                     config.skip = true;
                 }
 
-                if (result.count("poll")) {
-                    poll_spec.enabled = result["poll"].as<bool>();
-                }
-
                 if (result.count("config")) {
                     config.config_file = result["config"].as<std::string>();
                 }
@@ -76,8 +70,6 @@ namespace replica {
                 fmt::print(style, "Error parsing options: {}\n", e.what());
                 config.skip = true;
             }
-
-            config.poll_spec = poll_spec;
 
             return config;
         }

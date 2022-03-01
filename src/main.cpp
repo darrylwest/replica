@@ -3,9 +3,30 @@
 //
 
 #include <iostream>
+#include <thread>
 
 #include "replica.hpp"
 #include "config.hpp"
+#include "ticker.hpp"
+
+bool tick_handler(const size_t tick) {
+    const auto logger = replica::get_logger();
+    logger->info("tick {}", tick);
+
+    std::cout << "run the thread loop, tick: " << tick << std::endl;
+
+    return true;
+}
+
+void start_scan(replica::config::Config config) {
+    const auto logger = replica::get_logger();
+
+    logger->info("start the ticker with interval: {}", config.interval);
+
+    std::thread t = replica::ticker::start(config.interval, tick_handler);
+
+    t.join();
+}
 
 int main(int argc, const char *argv[]) {
     const auto config = replica::config::parse(argc, argv);
@@ -17,14 +38,7 @@ int main(int argc, const char *argv[]) {
         const auto style = fg(fmt::color::lime) | fmt::emphasis::bold;
         fmt::print(style, "{}, Version: {}\n", replica::BANNER, replica::APP_VERSION);
 
-        const auto logger = replica::get_logger();
-        // the ticker listens for changes to config and  if polling is enabled, queries files for changes
-
-        replica::scan_myfiles();
-
-        fmt::print("start the ticker... \n");
-
-        // listen for signal events
+        start_scan(config);
 
         return 0;
     }

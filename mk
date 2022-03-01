@@ -51,7 +51,7 @@ case $0 in
     watch
     ;;
   *build)
-    build
+    cmake -S . -B build 
     ;;
   *clean)
     clean
@@ -60,7 +60,7 @@ case $0 in
     time ( clean && config && build && run && run_tests )
     ;;
   *mk)
-    build && run_tests
+    cmake --build build && run_tests
     ;;
   *)
     config && build && run && run_tests

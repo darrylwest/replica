@@ -25,11 +25,6 @@ namespace replica {
     const char* APP_VERSION = "22.2.28";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
-    struct PollSpec {
-        bool enabled {true};
-        long interval {5000}; // millis
-    };
-
     struct ReplicaSpec {
         std::string version;
         std::string name;
@@ -39,7 +34,6 @@ namespace replica {
         std::vector<std::string> compression_rules;
         bool encrypt {false};
         std::vector<std::string> encryption_rules;
-        PollSpec poll_spec;
     };
 
     namespace fs = std::filesystem;
@@ -146,8 +140,9 @@ namespace replica {
         return files;
     }
 
-    void scan_myfiles() {
-        const auto logger = get_logger();
+    /*
+    void start_scan() {
+
         const auto path = std::string_view("/usr/local/bin/");
         const auto folder = fs::path(path);
 
@@ -159,6 +154,7 @@ namespace replica {
             logger->info("{}", file.to_string());
         }
     }
+    */
 }
 
 #endif
