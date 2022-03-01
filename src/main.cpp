@@ -15,6 +15,8 @@ bool tick_handler(const size_t tick) {
 
     std::cout << "run the thread loop, tick: " << tick << std::endl;
 
+    logger->flush();
+
     return true;
 }
 
