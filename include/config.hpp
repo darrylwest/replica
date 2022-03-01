@@ -21,7 +21,7 @@ namespace replica {
             std::string replica_home = ".replica";
             std::string config_file = "config.json";
             int interval = 1000;
-            std::string sources;
+            std::vector<std::string> sources;
             std::string cmd;
         };
 
@@ -38,7 +38,8 @@ namespace replica {
                     ("h,help", "Show this help")
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
                     ("c,config", "The configuration file", cxxopts::value<std::string>())
-                    ("s,sources", "A commad delimited list of source folders to watch", cxxopts::value<std::string>())
+                    ("i,interval", "Specify the loop inteval in milliseconds", cxxopts::value<int>())
+                    ("s,sources", "A delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
                     ("cmd", "A system command to run when a watched file is modified", cxxopts::value<std::string>())
                 ;
 
@@ -59,11 +60,15 @@ namespace replica {
                 }
 
                 if (result.count("sources")) {
-                    config.sources = result["sources"].as<std::string>();
+                    config.sources = result["sources"].as<std::vector<std::string>>();
                 }
 
                 if (result.count("cmd")) {
                     config.cmd = result["cmd"].as<std::string>();
+                }
+
+                if (result.count("interval")) {
+                    config.interval = result["interval"].as<int>();
                 }
             } catch (const cxxopts::OptionException& e) {
                 auto style = fg(fmt::color::red) | fmt::emphasis::bold;

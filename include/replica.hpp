@@ -25,17 +25,6 @@ namespace replica {
     const char* APP_VERSION = "22.2.28";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
-    struct ReplicaSpec {
-        std::string version;
-        std::string name;
-        std::vector<std::string> src_folders;
-        std::vector<std::string> targets;
-        bool compress {false};
-        std::vector<std::string> compression_rules;
-        bool encrypt {false};
-        std::vector<std::string> encryption_rules;
-    };
-
     namespace fs = std::filesystem;
     using tp = std::chrono::system_clock::time_point;
     struct FileSpec {
