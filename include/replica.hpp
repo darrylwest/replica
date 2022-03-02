@@ -133,7 +133,7 @@ namespace replica {
         }
 
         logger->info("file count: {}", files.size());
-        for (const auto file : files) {
+        for (const auto &file : files) {
             logger->debug("{} {} {}", file.filename, file.last_modified, file.size);
         }
 
@@ -143,9 +143,9 @@ namespace replica {
     fvec scan_folders(const svec folders, const svec extensions, const svec excludes) {
         auto files = fvec();
 
-        for (const auto src : folders) {
+        for (const auto &src : folders) {
             auto list = scan_files(fs::path(src), extensions, excludes);
-            for (const auto file : list) {
+            for (const auto &file : list) {
                 files.push_back(file);
             }
         }
@@ -156,7 +156,7 @@ namespace replica {
     svec validate_folders(const svec sources) {
         auto folders = svec();
 
-        for (const auto src : sources) {
+        for (const auto &src : sources) {
             auto p = fs::path(src);
             folders.push_back(src);
         }
@@ -178,7 +178,7 @@ namespace replica {
             logger->info("last scan file count: {}", last_scan.size());
 
             auto files = scan_folders(folders, config.extensions, config.excludes);
-            for (const auto file : files) {
+            for (const auto &file : files) {
                 // compare with last scan
                 logger->info("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
             }
