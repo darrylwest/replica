@@ -13,9 +13,13 @@ int main(int argc, const char *argv[]) {
 
     if (config.skip) {
         return 0;
-    } else if (config.dryrun) {
+    } else {
         const auto style = fg(fmt::color::lime) | fmt::emphasis::bold;
         fmt::print(style, "{}, Version: {}\n", replica::BANNER, replica::APP_VERSION);
+
+        if (config.config_file != "") {
+            fmt::print("parse the config file: {}\n", config.config_file);
+        }
 
         replica::start_scan(config);
     }

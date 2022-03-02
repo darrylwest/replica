@@ -40,9 +40,9 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE(std::end(argv) - std::begin(argv) == argc);
         REQUIRE_THAT(config.name, cm::Equals(name));
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
-        REQUIRE(config.dryrun == true);
+        REQUIRE(config.dryrun == false);
         REQUIRE(config.skip == false);
-        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+        REQUIRE_THAT(config.config_file, cm::Matches(""));
     }
 
     SECTION("version") {
@@ -51,9 +51,9 @@ TEST_CASE("command line", "[parse]") {
         auto config = replica::config::parse(argc, argv);
         REQUIRE_THAT(config.name, cm::Equals(name));
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
-        REQUIRE(config.dryrun == true);
+        REQUIRE(config.dryrun == false);
         REQUIRE(config.skip == true);
-        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+        REQUIRE_THAT(config.config_file, cm::Matches(""));
     }
 
     SECTION("help") {
@@ -62,9 +62,9 @@ TEST_CASE("command line", "[parse]") {
         auto config = replica::config::parse(argc, argv);
         REQUIRE_THAT(config.name, cm::Equals(name));
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
-        REQUIRE(config.dryrun == true);
+        REQUIRE(config.dryrun == false);
         REQUIRE(config.skip == true);
-        REQUIRE_THAT(config.config_file, cm::Matches("config.json"));
+        REQUIRE_THAT(config.config_file, cm::Matches(""));
     }
 
     SECTION("config") {
@@ -73,7 +73,7 @@ TEST_CASE("command line", "[parse]") {
         auto config = replica::config::parse(argc, argv);
         REQUIRE_THAT(config.name, cm::Equals(name));
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
-        REQUIRE(config.dryrun == true);
+        REQUIRE(config.dryrun == false);
         REQUIRE(config.skip == false);
         REQUIRE_THAT(config.config_file, cm::Matches("custom-config.json"));
     }

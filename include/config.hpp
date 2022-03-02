@@ -4,6 +4,7 @@
 //
 
 #pragma once
+#include <vector>
 #ifndef REPLICA_CONFIG_HPP
 #define REPLICA_CONFIG_HPP
 
@@ -19,11 +20,12 @@ namespace replica {
     namespace config {
         struct Config {
             std::string name;
-            bool dryrun = true;
+            bool dryrun = false;
             bool skip = false;
             std::string replica_home = ".replica";
-            std::string config_file = "config.json";
+            std::string config_file = "";
             int interval = 1000;
+            std::vector<std::string> filelist;
             std::vector<std::string> sources;
             std::vector<std::string> extensions;
             std::vector<std::string> excludes;
@@ -44,6 +46,7 @@ namespace replica {
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
                     ("c,config", "The configuration file", cxxopts::value<std::string>())
                     ("i,interval", "Specify the loop inteval in milliseconds", cxxopts::value<int>())
+                    ("f,filelist", "A comma delimited list of files to watch", cxxopts::value<std::vector<std::string>>())
                     ("s,sources", "A comma delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
                     ("e,extensions", "A comma delimited list of extensions, e.g., .hpp,cpp,.c", cxxopts::value<std::vector<std::string>>())
                     ("x,excludes", "A comma delimited list of files/folders to exclude", cxxopts::value<std::vector<std::string>>())

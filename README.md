@@ -46,11 +46,11 @@ Usage:
                         modified
 ```
 
-### Replica Actors
+### Replica Ticker Loop
 
-Two primary actors in the replica system are the Replica Hub and Replica Worker.  The hub directs workers to carry out various tasks as dictated by the hub's manifest.  The manifest can be updated at any time to add new or modify existing requirements.   Hubs may also request work from remote hubs when a replica sync needs to be performed across two or more machines.
+_TBD_
 
-## CMake & CLion
+## CMake
 
 This project is based on manual editing of CMakeFiles.txt to comply with src/library/test/build folder structure.  Development 
 is enabled for CLion but can be done in vim, vscode, or any editor.
@@ -60,35 +60,22 @@ is enabled for CLion but can be done in vim, vscode, or any editor.
 * main branch: this is the distribution branch.
 * develop branch: this is the primary development branch.  It's merged to main usually through pull requests.
 
-## Dependents
+_Custom branches are also available for specific builds_
 
-* cxxopts for command line opt parsing
-* openSSL to encrypt files when necessary
-* ?? for compression when necessary
-* fswatch (or other watch lib) to monitor mac os or linux file systesms
-
-## Package Management
+## Package Management (_future_)
 
 [CPM?](https://github.com/cpm-cmake/CPM.cmake)
 
 ## Data Structs
 
-### PollSpec
-
-Used to define a file/folder polling interval and whether is should be enabled or disabled.
-
-### ReplicaSpec
-
-Defines files to watch and targets for replication.  Also includes poll spec to determine if polling is preferred it watcher.
-
-
-### FileSpec
-
-Specs on each watched file including modification date, size, sha sum, and the last time it was replicated.
+* Config
+* FileSpec
 
 ## Notes
 
-* no classes, just structs
+* cpp 20
+* build and tested for linux (debian) with gcc 10.2 and mac with clang 13
+* structs and closures but no classes
 
 ## Dependencies
 
@@ -103,10 +90,13 @@ _TODO : write a script to pull, build and install all deps to an internal (or ca
 * [ ] spdlog - download, build and install
 * [ ] threads - available with gcc
 * [ ] cxxopts.hpp - in the include folder
-* [ ] openssl - install
 * [ ] catch2 - included in test folder
-* [ ] boost - v1.74 ; apt-get install libboost-all-dev / brew install boost
 * [ ] json - nlohmann-json ; brew install nlohmann-json ; debian: download, build and install
+
+_Future dependencies for multi-machine implementations, backups, etc._
+
+* [ ] openssl - install
+* [ ] boost - v1.74 ; apt-get install libboost-all-dev / brew install boost
 
 _Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_master) to replace/augment json encoding..._
 
@@ -126,4 +116,3 @@ _Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_mas
 * [Build2 Toolchain](https://www.build2.org/)
 
 ###### darryl.west | 2022.03.01
-
