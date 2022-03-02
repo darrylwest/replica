@@ -93,3 +93,26 @@ TEST_CASE("parse config", "[parse_config]") {
         REQUIRE(config.interval == 900);
     }
 }
+
+TEST_CASE("utils", "[utils]") {
+    SECTION("read_file") {
+        std::string text = utils::read_file("test/data/config.json");
+
+        REQUIRE(text != "");
+        REQUIRE(text.size() > 190);
+        std::cout << "Text: " << text << '\n';
+    }
+
+    SECTION("epoch_now") {
+        auto t = utils::epoch_now();
+        REQUIRE(t > 1);
+    }
+
+    SECTION("file_mod_time") {
+        // point to a known file
+        auto file = std::filesystem::path{"test/data/config.json"};
+        auto ftime = utils::file_mod_time(file);
+        auto now = utils::epoch_now();
+        REQUIRE(ftime < now);
+    }
+}

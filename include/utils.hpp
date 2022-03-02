@@ -4,6 +4,8 @@
 #ifndef REPLICA_UTILS_HPP
 #define REPLICA_UTILS_HPP
 
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <chrono>
 #include <vector>
@@ -15,6 +17,27 @@
 #include <cstdlib>
 
 namespace utils {
+    std::string read_file(std::string filename) {
+        std::string text;
+
+        std::ifstream infile;
+        infile.open(filename);
+
+        if (!infile.is_open()) {
+            std::cerr << "ERROR! could now open file: " << filename << std::endl;
+            exit(1);
+        }
+
+        std::string line;
+        while (infile && std::getline(infile, line)) {
+            text.append(line);
+        }
+
+        infile.close();
+
+        return text;
+    }
+
     size_t epoch_now() {
         const auto now = std::chrono::system_clock::now();
         const auto epoch = now.time_since_epoch();
