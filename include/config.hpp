@@ -13,7 +13,7 @@
 #include "cxxopts.hpp"
 
 namespace replica {
-    const char* APP_VERSION = "22.2.28";
+    const char* APP_VERSION = "22.3.1";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {
