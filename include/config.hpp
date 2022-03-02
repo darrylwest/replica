@@ -32,6 +32,10 @@ namespace replica {
             std::string cmd;
         };
 
+        void parse_json(Config &config) {
+            config.interval = 900;
+        }
+
         Config parse(int argc, const char* argv[]) {
             Config config;
 

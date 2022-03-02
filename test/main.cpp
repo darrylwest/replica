@@ -31,7 +31,7 @@ TEST_CASE("command line", "[parse]") {
     char version[] = "--version";
     char help[] = "--help";
     char config_option[] = "--config";
-    char config_file[] = "custom-config.json";
+    char config_file[] = "test/data/config.json";
 
     SECTION("zero args") {
         int argc = 1;
@@ -75,6 +75,21 @@ TEST_CASE("command line", "[parse]") {
         REQUIRE_THAT(config.replica_home, cm::Equals(".replica"));
         REQUIRE(config.dryrun == false);
         REQUIRE(config.skip == false);
-        REQUIRE_THAT(config.config_file, cm::Matches("custom-config.json"));
+        REQUIRE_THAT(config.config_file, cm::Matches("test/data/config.json"));
+    }
+}
+
+TEST_CASE("parse config", "[parse_config]") {
+    char config_file[] = "test/data/config.json";
+
+    SECTION("parse_json") {
+        // first, create the config struct
+        const char *argv[] = { "x", "--config", config_file};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::config::parse(argc, argv);
+        REQUIRE_THAT(config.config_file, cm::Matches("test/data/config.json"));
+
+        replica::config::parse_json(config);
+        REQUIRE(config.interval == 900);
     }
 }

@@ -3,5 +3,5 @@
     "extensions": [".hpp,", ".cpp"],
     "excludes": ["cxxopts.hpp", "fmt/", "catch.hpp", ".git", "/build/"],
     "cmd": "make debug",
-    "interval": 1000
+    "interval": 900
 }
