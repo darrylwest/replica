@@ -9,7 +9,7 @@
 #include "config.hpp"
 
 int main(int argc, const char *argv[]) {
-    const auto config = replica::config::parse(argc, argv);
+    auto config = replica::config::parse(argc, argv);
 
     if (config.skip) {
         return 0;
@@ -19,6 +19,7 @@ int main(int argc, const char *argv[]) {
 
         if (config.config_file != "") {
             fmt::print("parse the config file: {}\n", config.config_file);
+            replica::config::parse_json(config);
         }
 
         replica::start_scan(config);

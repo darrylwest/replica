@@ -38,6 +38,16 @@ namespace utils {
         return text;
     }
 
+    std::string vec_to_string(std::vector<std::string> vec) {
+        std::string text;
+
+        for (const auto &s : vec) {
+            text.append(s).append(",");
+        }
+
+        return text;
+    }
+
     size_t epoch_now() {
         const auto now = std::chrono::system_clock::now();
         const auto epoch = now.time_since_epoch();

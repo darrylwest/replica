@@ -14,9 +14,10 @@
 #include <nlohmann/json.hpp>
 #include "cxxopts.hpp"
 #include "utils.hpp"
+#include "fmt/format.h"
 
 namespace replica {
-    const char* APP_VERSION = "22.3.1";
+    const char* APP_VERSION = "22.3.2";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {
@@ -32,6 +33,20 @@ namespace replica {
             std::vector<std::string> extensions;
             std::vector<std::string> excludes;
             std::string cmd;
+
+            std::string to_string() {
+                return fmt::format("{},home:{},config:{},interval:{},sources:{},cmd:{}", 
+                    this->name,
+                    this->replica_home,
+                    this->config_file,
+                    this->interval,
+                    // this->filelist,
+                    utils::vec_to_string(this->sources),
+                    // this->extensions,
+                    // this->excludes,
+                    this->cmd
+                );
+            }
         };
 
         void parse_json(Config &config) {
@@ -39,11 +54,11 @@ namespace replica {
             auto js = nlohmann::json::parse(text);
 
             js.at("interval").get_to(config.interval);
-            js.at("cmd").get_to(config.cmd);
-            js.at("excludes").get_to(config.excludes);
-            js.at("extensions").get_to(config.extensions);
             js.at("sources").get_to(config.sources);
+            js.at("extensions").get_to(config.extensions);
+            js.at("excludes").get_to(config.excludes);
             js.at("filelist").get_to(config.filelist);
+            js.at("cmd").get_to(config.cmd);
         }
 
         Config parse(int argc, const char* argv[]) {

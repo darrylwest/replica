@@ -2,8 +2,8 @@
     "name": "this is a test config file",
     "version": "2022.03.02",
     "sources": ["src", "include", "test"],
-    "extensions": [".hpp,", ".cpp"],
-    "excludes": ["cxxopts.hpp", "fmt/", "catch.hpp", ".git", "/build/"],
+    "extensions": [".hpp", ".cpp"],
+    "excludes": ["cxxopts.hpp", "fmt/", "catch.hpp", ".git", "build/"],
     "cmd": "make debug",
     "filelist": [],
     "interval": 900
