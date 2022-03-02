@@ -6,26 +6,22 @@
 
 set -eu
 
-function clean() {
+clean() {
   printf "clean all from build folder...\n"
   /bin/rm -fr build
 }
 
-function config() {
+config() {
   (
     [ -f build/Makefile ] || {
       printf "create build folder...\n"
       /bin/rm -fr build
-      mkdir build && cd build && cmake ../
+      cmake -S . -B build 
     }
   )
 }
 
-function build() {
-  ( cd build && make )
-}
-
-function run() {
+run() {
   (
     printf "run the examples...\n"
     cd build 
@@ -35,12 +31,12 @@ function run() {
   )
 }
 
-function watch() {
+watch() {
   printf "watching from pid: $$\n"
   watchexec -c -d 250 -e .cpp,.hpp,.txt -p -i build -w ./ ./mk
 }
 
-function run_tests() {
+run_tests() {
   ./build/test/replica_unit_tests --durations yes
 }
 
@@ -54,13 +50,13 @@ case $0 in
     cmake -S . -B build 
     ;;
   *clean)
-    clean
+    clean && config
     ;;
   *clean-mk)
     time ( clean && config && build && run && run_tests )
     ;;
   *mk)
-    cmake --build build && run_tests
+    config && cmake --build build && run_tests
     ;;
   *run)
     ./build/replica -i 2500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp'

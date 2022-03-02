@@ -4,31 +4,62 @@
 //
 
 #pragma once
+#include <vector>
 #ifndef REPLICA_CONFIG_HPP
 #define REPLICA_CONFIG_HPP
 
 #include <string>
 #include <chrono>
 #include <filesystem>
+#include <nlohmann/json.hpp>
 #include "cxxopts.hpp"
+#include "utils.hpp"
+#include "fmt/format.h"
 
 namespace replica {
-    const char* APP_VERSION = "22.3.1";
+    const char* APP_VERSION = "22.3.2";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {
         struct Config {
             std::string name;
-            bool dryrun = true;
+            bool dryrun = false;
             bool skip = false;
             std::string replica_home = ".replica";
-            std::string config_file = "config.json";
+            std::string config_file = "";
             int interval = 1000;
+            std::vector<std::string> filelist;
             std::vector<std::string> sources;
             std::vector<std::string> extensions;
             std::vector<std::string> excludes;
             std::string cmd;
+
+            std::string to_string() {
+                return fmt::format("{},home:{},config:{},interval:{},sources:{},cmd:{}", 
+                    this->name,
+                    this->replica_home,
+                    this->config_file,
+                    this->interval,
+                    // this->filelist,
+                    utils::vec_to_string(this->sources),
+                    // this->extensions,
+                    // this->excludes,
+                    this->cmd
+                );
+            }
         };
+
+        void parse_json(Config &config) {
+            std::string text = utils::read_file(config.config_file);
+            auto js = nlohmann::json::parse(text);
+
+            js.at("interval").get_to(config.interval);
+            js.at("sources").get_to(config.sources);
+            js.at("extensions").get_to(config.extensions);
+            js.at("excludes").get_to(config.excludes);
+            js.at("filelist").get_to(config.filelist);
+            js.at("cmd").get_to(config.cmd);
+        }
 
         Config parse(int argc, const char* argv[]) {
             Config config;
@@ -44,6 +75,7 @@ namespace replica {
                     ("d,dryrun", "Just parse but don't run replica", cxxopts::value<bool>()->default_value("false"))
                     ("c,config", "The configuration file", cxxopts::value<std::string>())
                     ("i,interval", "Specify the loop inteval in milliseconds", cxxopts::value<int>())
+                    ("f,filelist", "A comma delimited list of files to watch", cxxopts::value<std::vector<std::string>>())
                     ("s,sources", "A comma delimited list of source folders to watch", cxxopts::value<std::vector<std::string>>())
                     ("e,extensions", "A comma delimited list of extensions, e.g., .hpp,cpp,.c", cxxopts::value<std::vector<std::string>>())
                     ("x,excludes", "A comma delimited list of files/folders to exclude", cxxopts::value<std::vector<std::string>>())
