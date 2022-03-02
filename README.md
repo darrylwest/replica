@@ -18,7 +18,33 @@ targets with instant compile and test feedback.
 
 ## Usage
 
-`replica  -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp,.git,/build/' -c make`
+```
+replica  \
+  --sources src,include,test \
+  --extensions .hpp,.cpp \
+  --excludes 'cxxopts.hpp,fmt/,catch.hpp,.git,/build/' \
+  --cmd make`
+```
+
+### Help
+
+```
+Replica Exchange Service © 2022 Rain City Software
+Usage:
+  ./build/replica [OPTION...]
+
+  -v, --version         Show the current version
+  -h, --help            Show this help
+  -d, --dryrun          Just parse but don't run replica
+  -c, --config arg      The configuration file
+  -i, --interval arg    Specify the loop inteval in milliseconds
+  -s, --sources arg     A comma delimited list of source folders to watch
+  -e, --extensions arg  A comma delimited list of extensions, e.g.,
+                        .hpp,cpp,.c
+  -x, --excludes arg    A comma delimited list of files/folders to exclude
+      --cmd arg         A system command to run when a watched file is
+                        modified
+```
 
 ### Replica Actors
 
@@ -99,5 +125,5 @@ _Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_mas
 * [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 * [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.02.28
+###### darryl.west | 2022.03.01
 
