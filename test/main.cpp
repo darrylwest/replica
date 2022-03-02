@@ -79,21 +79,6 @@ TEST_CASE("command line", "[parse]") {
     }
 }
 
-TEST_CASE("parse config", "[parse_config]") {
-    char config_file[] = "test/data/config.json";
-
-    SECTION("parse_json") {
-        // first, create the config struct
-        const char *argv[] = { "x", "--config", config_file};
-        int argc = std::end(argv) - std::begin(argv);
-        auto config = replica::config::parse(argc, argv);
-        REQUIRE_THAT(config.config_file, cm::Matches("test/data/config.json"));
-
-        replica::config::parse_json(config);
-        REQUIRE(config.interval == 900);
-    }
-}
-
 TEST_CASE("utils", "[utils]") {
     SECTION("read_file") {
         std::string text = utils::read_file("test/data/config.json");
@@ -114,5 +99,24 @@ TEST_CASE("utils", "[utils]") {
         auto ftime = utils::file_mod_time(file);
         auto now = utils::epoch_now();
         REQUIRE(ftime < now);
+    }
+}
+
+TEST_CASE("parse config", "[parse_config]") {
+    char config_file[] = "test/data/config.json";
+
+    SECTION("parse_json") {
+        // first, create the config struct
+        const char *argv[] = { "x", "--config", config_file};
+        int argc = std::end(argv) - std::begin(argv);
+        auto config = replica::config::parse(argc, argv);
+        REQUIRE_THAT(config.config_file, cm::Matches("test/data/config.json"));
+
+        replica::config::parse_json(config);
+        REQUIRE(config.interval == 900);
+        REQUIRE(config.sources.size() == 3);
+        REQUIRE(config.extensions.size() == 2);
+        REQUIRE(config.excludes.size() == 5);
+        REQUIRE(config.filelist.size() == 0);
     }
 }
