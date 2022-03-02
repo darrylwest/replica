@@ -11,7 +11,9 @@
 #include <string>
 #include <chrono>
 #include <filesystem>
+#include <nlohmann/json.hpp>
 #include "cxxopts.hpp"
+#include "utils.hpp"
 
 namespace replica {
     const char* APP_VERSION = "22.3.1";
@@ -33,7 +35,15 @@ namespace replica {
         };
 
         void parse_json(Config &config) {
-            config.interval = 900;
+            std::string text = utils::read_file(config.config_file);
+            auto js = nlohmann::json::parse(text);
+
+            js.at("interval").get_to(config.interval);
+            js.at("cmd").get_to(config.cmd);
+            js.at("excludes").get_to(config.excludes);
+            js.at("extensions").get_to(config.extensions);
+            js.at("sources").get_to(config.sources);
+            js.at("filelist").get_to(config.filelist);
         }
 
         Config parse(int argc, const char* argv[]) {
