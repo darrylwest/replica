@@ -164,6 +164,35 @@ namespace replica {
         return folders;
     }
 
+    fvec compare_files(const fvec last, const fvec current) {
+        const auto logger = get_logger();
+
+        // create the map
+        auto fmap = std::map<std::string, FileSpec>();
+        for (const auto &file : last) {
+            fmap.emplace(file.filename, file);
+        }
+
+        auto changes = fvec();
+        for (const auto &file : current) {
+            // compare with last scan
+            logger->debug("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
+
+            auto search = fmap.find(file.filename);
+            if (search != fmap.end()) {
+                auto last_file = search->second;
+                if (last_file.size != file.size || last_file.last_modified != file.last_modified) {
+                    changes.emplace_back(file);
+                }
+            } else {
+                changes.emplace_back(file);
+            }
+            
+        }
+
+        return changes;
+    }
+
     void start_scan(replica::config::Config config) {
         const auto logger = get_logger();
         logger->info("start the ticker with interval: {}", config.interval);
@@ -177,13 +206,15 @@ namespace replica {
         std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
             logger->info("last scan file count: {}", last_scan.size());
 
-            auto files = scan_folders(folders, config.extensions, config.excludes);
-            for (const auto &file : files) {
-                // compare with last scan
-                logger->info("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
-            }
+            auto current_scan = scan_folders(folders, config.extensions, config.excludes);
 
             // if there are changes run the cmd then do the last_scan again...
+            auto changes = compare_files(last_scan, current_scan);
+
+            if (changes.size() > 0) {
+                // trigger the command...
+                last_scan.swap(current_scan);
+            }
 
             logger->flush();
 
