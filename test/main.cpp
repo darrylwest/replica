@@ -85,7 +85,7 @@ TEST_CASE("utils", "[utils]") {
 
         REQUIRE(text != "");
         REQUIRE(text.size() > 190);
-        std::cout << "Text: " << text << '\n';
+        // std::cout << "Text: " << text << '\n';
     }
 
     SECTION("epoch_now") {

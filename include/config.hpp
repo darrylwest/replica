@@ -35,15 +35,15 @@ namespace replica {
             std::string cmd;
 
             std::string to_string() {
-                return fmt::format("{},home:{},config:{},interval:{},sources:{},cmd:{}", 
+                return fmt::format("{},home:{},config:{},interval:{},sources:{},ext:{},excludes:{},cmd:{}", 
                     this->name,
                     this->replica_home,
                     this->config_file,
                     this->interval,
-                    // this->filelist,
                     utils::vec_to_string(this->sources),
-                    // this->extensions,
-                    // this->excludes,
+                    utils::vec_to_string(this->extensions),
+                    utils::vec_to_string(this->excludes),
+                    utils::vec_to_string(this->filelist),
                     this->cmd
                 );
             }
@@ -53,11 +53,24 @@ namespace replica {
             std::string text = utils::read_file(config.config_file);
             auto js = nlohmann::json::parse(text);
 
-            js.at("interval").get_to(config.interval);
+            if (js.contains("interval")) {
+                js.at("interval").get_to(config.interval);
+            }
+
             js.at("sources").get_to(config.sources);
-            js.at("extensions").get_to(config.extensions);
-            js.at("excludes").get_to(config.excludes);
-            js.at("filelist").get_to(config.filelist);
+
+            if (js.contains("extensions")) {
+                js.at("extensions").get_to(config.extensions);
+            }
+
+            if (js.contains("excludes")) {
+                js.at("excludes").get_to(config.excludes);
+            }
+
+            if (js.contains("filelist")) {
+                js.at("filelist").get_to(config.filelist);
+            }
+
             js.at("cmd").get_to(config.cmd);
         }
 
