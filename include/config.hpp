@@ -17,7 +17,7 @@
 #include "fmt/format.h"
 
 namespace replica {
-    const char* APP_VERSION = "22.3.2";
+    const char* APP_VERSION = "22.3.3";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {

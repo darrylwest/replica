@@ -132,7 +132,7 @@ namespace replica {
             }
         }
 
-        logger->info("file count: {}", files.size());
+        logger->debug("file count: {}", files.size());
         for (const auto &file : files) {
             logger->debug("{} {} {}", file.filename, file.last_modified, file.size);
         }
@@ -167,7 +167,7 @@ namespace replica {
     fvec compare_files(const fvec last, const fvec current) {
         const auto logger = get_logger();
 
-        // create the map
+        // create a file lookup map
         auto fmap = std::map<std::string, FileSpec>();
         for (const auto &file : last) {
             fmap.emplace(file.filename, file);
@@ -175,9 +175,6 @@ namespace replica {
 
         auto changes = fvec();
         for (const auto &file : current) {
-            // compare with last scan
-            logger->debug("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
-
             auto search = fmap.find(file.filename);
             if (search != fmap.end()) {
                 auto last_file = search->second;
@@ -187,7 +184,6 @@ namespace replica {
             } else {
                 changes.emplace_back(file);
             }
-            
         }
 
         return changes;
@@ -201,10 +197,13 @@ namespace replica {
 
         auto last_scan = scan_folders(folders, config.extensions, config.excludes);
 
+        for (const auto &file : last_scan) {
+            logger->info("{} {} {} {}", file.filename, file.last_modified, file.size, file.last_scan);
+        }
+
         logger->info("total of {} files", last_scan.size());
 
         std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
-            logger->info("last scan file count: {}", last_scan.size());
 
             auto current_scan = scan_folders(folders, config.extensions, config.excludes);
 
@@ -212,13 +211,15 @@ namespace replica {
             auto changes = compare_files(last_scan, current_scan);
 
             if (changes.size() > 0) {
+                logger->info("tick: {}, file change count: {}", tick, changes.size());
+
                 // trigger the command...
                 last_scan.swap(current_scan);
             }
 
             logger->flush();
 
-            return tick < 3;
+            return true;
         });
 
         t.join();
