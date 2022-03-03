@@ -63,7 +63,7 @@ case $0 in
     cmake --build build && run_tests
     ;;
   *run)
-    ./build/replica -i 2500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp'
+    ./build/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp' --cmd './mk'
     ;;
   *)
     config && build && run && run_tests

@@ -17,7 +17,7 @@
 #include "fmt/format.h"
 
 namespace replica {
-    const char* APP_VERSION = "22.3.3";
+    const char* APP_VERSION = "22.3.4";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {
@@ -35,7 +35,7 @@ namespace replica {
             std::string cmd;
 
             std::string to_string() {
-                return fmt::format("{},home:{},config:{},interval:{},sources:{},ext:{},excludes:{},cmd:{}", 
+                return fmt::format("{},home:{},config:{},interval:{},sources:{},ext:{},excludes:{},files:{},cmd:{}", 
                     this->name,
                     this->replica_home,
                     this->config_file,

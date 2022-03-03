@@ -18,6 +18,7 @@
 #include <chrono>
 #include <vector>
 #include <filesystem>
+#include <cstdlib>
 
 #include "utils.hpp"
 #include "ticker.hpp"
@@ -180,9 +181,11 @@ namespace replica {
                 auto last_file = search->second;
                 if (last_file.size != file.size || last_file.last_modified != file.last_modified) {
                     changes.emplace_back(file);
+                    logger->info("file change: {}", file.filename);
                 }
             } else {
                 changes.emplace_back(file);
+                logger->info("new file: {}", file.filename);
             }
         }
 
@@ -191,7 +194,9 @@ namespace replica {
 
     void start_scan(replica::config::Config config) {
         const auto logger = get_logger();
-        logger->info("start the ticker with interval: {}", config.interval);
+
+        logger->info("Begin scan, Version: {}", replica::APP_VERSION);
+        logger->info("Config: {}", config.to_string());
 
         const auto folders = validate_folders(config.sources);
 
@@ -204,7 +209,6 @@ namespace replica {
         logger->info("total of {} files", last_scan.size());
 
         std::thread t = replica::ticker::start(config.interval, [&](const size_t tick) -> bool {
-
             auto current_scan = scan_folders(folders, config.extensions, config.excludes);
 
             // if there are changes run the cmd then do the last_scan again...
@@ -215,6 +219,9 @@ namespace replica {
 
                 // trigger the command...
                 last_scan.swap(current_scan);
+                logger->flush();
+                
+                std::system(config.cmd.c_str());
             }
 
             logger->flush();
