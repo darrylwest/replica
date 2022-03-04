@@ -1,0 +1,12 @@
+{
+    "version": "22.2.22",
+    "name": "plaza-backups",
+    "src_folders": [ "photos", "Music" ],
+    "targets": [ "/Volumes/plaza", "dpw@piedmont.local:backups", "dpw@orinda.local:backups" ],
+    "compress": false,
+    "encrypt": false,
+    "poll_spec": {
+        "enabled": true,
+        "interval": 600000
+    }
+}

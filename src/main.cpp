@@ -1,25 +1,28 @@
+//
+// dpw
+//
 
 #include <iostream>
+#include <thread>
+
 #include "replica.hpp"
+#include "config.hpp"
 
-int main(int argc, char *argv[]) {
-    replica::Config config = replica::parse(argc, argv);
+int main(int argc, const char *argv[]) {
+    auto config = replica::config::parse(argc, argv);
 
-    // TODO : move this part to process module to enable unit tests...
     if (config.skip) {
         return 0;
-    } else if (config.dryrun) {
-        std::cout << replica::BANNER << '\n';
-        std::cout << "Version: " << replica::APP_VERSION << std::endl;
+    } else {
+        const auto style = fg(fmt::color::lime) | fmt::emphasis::bold;
+        fmt::print(style, "{}, Version: {}\n", replica::BANNER, replica::APP_VERSION);
 
-        // show the complete config...
-        std::cout << "Config: name: " << config.name << std::endl;
-        std::cout << "Config: home: " << config.replica_home << std::endl;
-        std::cout << "Config: dry-run: " << config.dryrun << std::endl;
-        std::cout << "Poll.enabled: " << config.poll_spec.enabled << std::endl;
-        std::cout << "Config: file: " << config.config_file << std::endl;
+        if (config.config_file != "") {
+            fmt::print("parse the config file: {}\n", config.config_file);
+            replica::config::parse_json(config);
+        }
 
-        return 0;
+        replica::start_scan(config);
     }
 
     return 0;

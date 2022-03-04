@@ -43,6 +43,7 @@
 ## Local 
 
 build/**/*
+release/**/*
 
 lib/*
-bin/*
+*.log

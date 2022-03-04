@@ -1,0 +1,27 @@
+#
+# 2022-03-04 00:12:32 dpw
+#
+
+alias clean='/bin/rm -fr build release'
+
+alias config='cmake -S . -B build'
+
+alias mktest='./build/test/replica_unit_tests --durations yes'
+
+mk_func() {
+    [ -d build ] || config
+
+    cmake --build build && ./build/test/replica_unit_tests --durations yes
+}
+
+mk_release() {
+    /bin/rm -fr release
+    cmake -S . -B release -DCMAKE_BUILD_TYPE=RELEASE
+
+    cmake --build release
+}
+
+alias mk='mk_func'
+
+alias mkrelease='mk_release'
+alias watch='/usr/local/bin/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp,CMakeCXXCompilerId.cpp' --cmd "./bin/mk"'
