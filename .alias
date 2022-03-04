@@ -24,4 +24,4 @@ mk_release() {
 alias mk='mk_func'
 
 alias mkrelease='mk_release'
-alias mkrun='./build/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp' --cmd "cmake --build build"'
+alias mkrun='./build/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp' --cmd "./bin/mk"'
