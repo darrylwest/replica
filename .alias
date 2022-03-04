@@ -24,4 +24,4 @@ mk_release() {
 alias mk='mk_func'
 
 alias mkrelease='mk_release'
-alias watch='./build/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp,CMakeCXXCompilerId.cpp' --cmd "./bin/mk"'
+alias watch='/usr/local/bin/replica -i 500 -s src,include,test -e .hpp,.cpp -x 'cxxopts.hpp,fmt/,catch.hpp,CMakeCXXCompilerId.cpp' --cmd "./bin/mk"'
