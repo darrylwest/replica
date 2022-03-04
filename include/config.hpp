@@ -4,11 +4,11 @@
 //
 
 #pragma once
-#include <vector>
 #ifndef REPLICA_CONFIG_HPP
 #define REPLICA_CONFIG_HPP
 
 #include <string>
+#include <vector>
 #include <chrono>
 #include <filesystem>
 #include <nlohmann/json.hpp>
