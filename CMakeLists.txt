@@ -13,7 +13,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Threads REQUIRED)
-add_compile_options(-Wall -Wextra -pedantic -Werror -O0)
+
+if (CMAKE_BUILD_TYPE MATCHES RELEASE)
+    add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror -O0)
+endif()
 
 add_executable(${PROJECT_NAME} src/main.cpp) # should add new source files now...
 target_include_directories(replica PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
