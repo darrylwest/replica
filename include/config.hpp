@@ -4,11 +4,11 @@
 //
 
 #pragma once
-#include <vector>
 #ifndef REPLICA_CONFIG_HPP
 #define REPLICA_CONFIG_HPP
 
 #include <string>
+#include <vector>
 #include <chrono>
 #include <filesystem>
 #include <nlohmann/json.hpp>
@@ -17,7 +17,7 @@
 #include "fmt/format.h"
 
 namespace replica {
-    const char* APP_VERSION = "22.3.5";
+    const char* APP_VERSION = "22.3.6";
     const char* BANNER = "Replica Exchange Service © 2022 Rain City Software";
 
     namespace config {

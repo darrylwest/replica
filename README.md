@@ -48,12 +48,16 @@ Usage:
 
 ### Replica Ticker Loop
 
-_TBD_
+The replica-ticker controls the file-scan frequency.  It provides a fixed delay between scans and processing.  
+For example, if the scan interval is set 1000 milliseconds the delay is executed, then the files are scanned and
+if any action is required the command is executed.  When the execution completes, the loop begins again.  So
+a 1000 millisecond interval is actually 1000 milliseconds + scan time + any process time.
 
 ## CMake
 
 This project is based on manual editing of CMakeFiles.txt to comply with src/library/test/build folder structure.  Development 
-is enabled for CLion but can be done in vim, vscode, or any editor.
+is enabled for CLion but can be done in vim, vscode, or any editor.  There are two primary targets--debug and release.  There
+are a set of aliases (_see .alias_) to support the cmake commands.
 
 ## Branches
 
@@ -79,7 +83,7 @@ _Custom branches are also available for specific builds_
 
 ## Dependencies
 
-std=c++20
+std=c++17
 CMake 3.16
 Debian 11, gcc 10
 osX 12, Apple Clang 13.0.0, darwin 21.3
@@ -95,7 +99,7 @@ _TODO : write a script to pull, build and install all deps to an internal (or ca
 
 _Future dependencies for multi-machine implementations, backups, etc._
 
-* [ ] openssl - install
+* [ ] openssl - install and build
 * [ ] boost - v1.74 ; apt-get install libboost-all-dev / brew install boost
 
 _Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_master) to replace/augment json encoding..._
@@ -115,4 +119,4 @@ _Consider using [message-pack](https://github.com/msgpack/msgpack-c/tree/cpp_mas
 * [Speed Log spdlog Fast c++ logger](https://github.com/gabime/spdlog)
 * [Build2 Toolchain](https://www.build2.org/)
 
-###### darryl.west | 2022.03.01
+###### darryl.west | 2022.03.04
