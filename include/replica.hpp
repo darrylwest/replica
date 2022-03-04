@@ -221,7 +221,10 @@ namespace replica {
                 last_scan.swap(current_scan);
                 logger->flush();
                 
-                std::system(config.cmd.c_str());
+                int rcode = std::system(config.cmd.c_str());
+                if (!rcode) {
+                    logger->warn("system call '{}' filed with code: {}", config.cmd, rcode);
+                }
             }
 
             logger->flush();
