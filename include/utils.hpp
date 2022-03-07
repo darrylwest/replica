@@ -43,8 +43,8 @@ namespace utils {
     std::string vec_to_string(std::vector<std::string> vec) {
         std::string text;
 
-        for (const auto &s : vec) {
-            text.append(s).append(",");
+        for (size_t i = 0; i < vec.size(); ++i) {
+            text += (i ? "," : "" ) + vec[i];
         }
 
         return text;
